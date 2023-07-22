@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home_mate/constant/colors.dart';
-import 'package:home_mate/screens/bottom_navigation.dart';
+import 'package:home_mate/widgets/bottom_nav.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -116,7 +116,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const NavBar(),
+                              builder: (context) => const NavBar(index: 0),
                             ),
                           );
                         } else {

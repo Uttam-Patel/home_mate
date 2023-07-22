@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_mate/screens/category.dart';
 import 'package:home_mate/screens/chat.dart';
 import 'package:home_mate/screens/home.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_mate/screens/profile.dart';
 import 'package:home_mate/screens/ticket.dart';
 
 class NavBar extends StatefulWidget {
-  const NavBar({super.key});
+  final int index;
+  const NavBar({super.key, required this.index});
 
   @override
   State<NavBar> createState() => _NavBarState();
@@ -21,11 +22,19 @@ class _NavBarState extends State<NavBar> {
     Chat(),
     Profile(),
   ];
-  Widget currentScreen = const Home();
-  int index = 0;
+  late Widget currentScreen;
+  late int index;
+  @override
+  void initState() {
+    super.initState();
+    index = widget.index;
+    currentScreen = screens[index];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: currentScreen,
       bottomSheet: SizedBox(
         height: 60,
         child: Row(
@@ -105,7 +114,6 @@ class _NavBarState extends State<NavBar> {
           ],
         ),
       ),
-      body: currentScreen,
     );
   }
 }
