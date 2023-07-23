@@ -146,7 +146,9 @@ class ServiceCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ProviderDetails(),
+                          builder: (context) => ProviderDetails(
+                            provider: info.provider,
+                          ),
                         ),
                       );
                     },
