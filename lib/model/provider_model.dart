@@ -17,5 +17,5 @@ ProviderUserModel demoProvider = ProviderUserModel(
     fName: "Wade",
     lName: "Warren",
     email: "demo@domain.com",
-    profileUrl: "assets/images/homecover4.png",
+    profileUrl: "assets/images/servicecover4.png",
     phone: "0000000000");

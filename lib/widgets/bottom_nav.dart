@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:home_mate/screens/booking_status.dart';
 import 'package:home_mate/screens/category.dart';
 import 'package:home_mate/screens/chat.dart';
 import 'package:home_mate/screens/home.dart';
 import 'package:home_mate/screens/profile.dart';
-import 'package:home_mate/screens/ticket.dart';
 
 class NavBar extends StatefulWidget {
   final int index;
@@ -17,7 +17,7 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   List<Widget> screens = const [
     Home(),
-    TicketBooking(),
+    BookingHistoryPage(),
     Categories(),
     Chat(),
     Profile(),

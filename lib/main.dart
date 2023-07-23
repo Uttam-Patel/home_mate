@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:home_mate/screens/booking_status.dart';
+import 'package:home_mate/screens/servicedetail.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +19,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.workSansTextTheme(),
       ),
-      home: const BookingHistoryPage(),
+      // home: const NavBar(index:0),
+      home: const ServiceDetail(),
     );
   }
 }

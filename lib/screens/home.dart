@@ -17,10 +17,10 @@ class _HomeState extends State<Home> {
   int imgIndex = 0;
   late PageController imgSliderController;
   List<String> sliderImages = [
-    "assets/images/homecover1.png",
-    "assets/images/homecover2.png",
-    "assets/images/homecover3.png",
-    "assets/images/homecover4.png",
+    "assets/images/servicecover1.png",
+    "assets/images/servicecover2.png",
+    "assets/images/servicecover3.png",
+    "assets/images/servicecover4.png",
   ];
 
   @override

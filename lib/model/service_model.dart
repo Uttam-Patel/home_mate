@@ -20,7 +20,7 @@ class ServiceModel {
 List<ServiceModel> demoServices = [
   ServiceModel(
     name: "Repait Broken ACs",
-    coverImg: "assets/images/homecover4.png",
+    coverImg: "assets/images/servicecover4.png",
     category: "AC Repair",
     price: 150,
     rating: 5,
@@ -28,7 +28,7 @@ List<ServiceModel> demoServices = [
   ),
   ServiceModel(
     name: "Repait Broken ACs",
-    coverImg: "assets/images/homecover4.png",
+    coverImg: "assets/images/servicecover4.png",
     category: "AC Repair",
     price: 150,
     rating: 2.6,
@@ -36,7 +36,7 @@ List<ServiceModel> demoServices = [
   ),
   ServiceModel(
     name: "Repait Broken ACs",
-    coverImg: "assets/images/homecover4.png",
+    coverImg: "assets/images/servicecover4.png",
     category: "AC Repair",
     price: 150,
     rating: 3.3,
@@ -44,7 +44,7 @@ List<ServiceModel> demoServices = [
   ),
   ServiceModel(
     name: "Repait Broken ACs",
-    coverImg: "assets/images/homecover4.png",
+    coverImg: "assets/images/servicecover4.png",
     category: "AC Repair",
     price: 150,
     rating: 2.3,
@@ -52,7 +52,7 @@ List<ServiceModel> demoServices = [
   ),
   ServiceModel(
     name: "Repait Broken ACs",
-    coverImg: "assets/images/homecover4.png",
+    coverImg: "assets/images/servicecover4.png",
     category: "AC Repair",
     price: 150,
     rating: 4.3,
@@ -60,7 +60,7 @@ List<ServiceModel> demoServices = [
   ),
   ServiceModel(
     name: "Repait Broken ACs",
-    coverImg: "assets/images/homecover4.png",
+    coverImg: "assets/images/servicecover4.png",
     category: "AC Repair",
     price: 150,
     rating: 4.3,
@@ -68,7 +68,7 @@ List<ServiceModel> demoServices = [
   ),
   ServiceModel(
     name: "Repait Broken ACs",
-    coverImg: "assets/images/homecover4.png",
+    coverImg: "assets/images/servicecover4.png",
     category: "AC Repair",
     price: 150,
     rating: 4.3,
@@ -76,7 +76,7 @@ List<ServiceModel> demoServices = [
   ),
   ServiceModel(
     name: "Repait Broken ACs",
-    coverImg: "assets/images/homecover4.png",
+    coverImg: "assets/images/servicecover4.png",
     category: "AC Repair",
     price: 150,
     rating: 4.3,

@@ -40,7 +40,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               boX(
-                  "assets/images/homecover1.png",
+                  "assets/images/servicecover1.png",
                   "#001",
                   "Apartment Cleaning with floors",
                   "123",
@@ -49,10 +49,10 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                   "12:00:00",
                   "Mike",
                   "Online"),
-              boX("assets/images/homecover1.png", "#002", "Garden Cleaning",
+              boX("assets/images/servicecover1.png", "#002", "Garden Cleaning",
                   "102", "5", "1 Aug 2023", "12:00:00", "Jems", "Cash"),
               boX(
-                  "assets/images/homecover1.png",
+                  "assets/images/servicecover1.png",
                   "#003",
                   "Fixing Electronic Devices",
                   "156",
@@ -62,7 +62,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                   "Jashon",
                   "Cash"),
               boX(
-                  "assets/images/homecover1.png",
+                  "assets/images/servicecover1.png",
                   "#004",
                   "Apartment Cleaning with floors",
                   "200",
@@ -72,7 +72,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                   "Michal",
                   "Online"),
               boX(
-                  "assets/images/homecover1.png",
+                  "assets/images/servicecover1.png",
                   "#005",
                   "Apartment Cleaning with floors",
                   "150",
@@ -82,7 +82,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                   "Alex",
                   "Cash"),
               boX(
-                  "assets/images/homecover1.png",
+                  "assets/images/servicecover1.png",
                   "#006",
                   "Apartment Cleaning with floors",
                   "50",
