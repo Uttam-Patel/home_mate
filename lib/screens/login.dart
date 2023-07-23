@@ -1,96 +1,123 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/services.dart';
 import 'package:home_mate/constant/colors.dart';
+import 'package:home_mate/constant/var.dart';
+import 'package:home_mate/widgets/bottom_nav.dart';
 
 import 'sign_up.dart';
 
-class LogIn extends StatelessWidget {
+class LogIn extends StatefulWidget {
   const LogIn({super.key});
+
+  @override
+  State<LogIn> createState() => _LogInState();
+}
+
+class _LogInState extends State<LogIn> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  late bool flag = false;
+  TextEditingController controller1 =TextEditingController();
+  TextEditingController controller2 =TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: clBG,
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Center(
+          child: SingleChildScrollView(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(
-                  height: 35,
+                Container(
+                  height: 220,
+                  width: 250,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/logIn.png")
+                    )
+                  ),
                 ),
+                Text("Welcome",style: TextStyle(fontSize: 35,fontWeight: FontWeight.bold),),
                 const Text(
-                  "Hello BK!",
-                  style: TextStyle(fontSize: 30),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text(
-                  "Welcome Back,You Have Been Missed For Long Time ",
+                  "You Have Been Missed For Long Time ",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 15),
                 ),
-                const SizedBox(
-                  height: 70,
-                ),
-                const TextField(
+                 SizedBox(
+                   height: 10,
+                 ),
+                 TextField(
+                   controller: controller1,
+                     keyboardType: TextInputType.number,
+                     inputFormatters: [
+                       LengthLimitingTextInputFormatter(10),
+                     ],
                     decoration: InputDecoration(
                         filled: true,
+                        enabled: !flag,
                         fillColor: Color.fromARGB(255, 237, 237, 239),
                         border: OutlineInputBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        hintText: "Email Address",
-                        suffixIcon: Icon(Icons.email))),
+                                BorderRadius.all(Radius.circular(12))),
+                        hintText: "Phone Number",
+                        )),
                 const SizedBox(
                   height: 10,
                 ),
-                const TextField(
-                    decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 237, 237, 239),
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        hintText: "Password",
-                        suffixIcon: Icon(Icons.remove_red_eye))),
+                 Visibility(
+                   visible: flag,
+                   child: Column(
+                     mainAxisSize: MainAxisSize.min,
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     crossAxisAlignment: CrossAxisAlignment.center,
+                     children: [
+                       TextField(
+                           controller: controller2,
+                           keyboardType: TextInputType.number,
+                           inputFormatters: [
+                             LengthLimitingTextInputFormatter(6),
+                           ],
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Color.fromARGB(255, 237, 237, 239),
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12))),
+                              hintText: "Enter OTP",
+                              )),
+                       SizedBox(
+                         height: 30,
+                       )
+                     ],
+                   ),
+                 ),
                 const SizedBox(
                   height: 5,
                 ),
-                Row(
-                  children: [
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text(
-                      "Remember Me",
-                    ),
-                    const SizedBox(
-                      width: 75,
-                    ),
-                    Text(
-                      "Forgot Password?",
-                      style: TextStyle(color: clPrimary),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async{
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) =>  NavBar(index: 0)), (route) => false);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>  NavBar(index: 0)));// Navigator.pop(context);
+                  },
                   style: ElevatedButton.styleFrom(
                       fixedSize: const Size(330, 48),
                       backgroundColor: clPrimary,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
-                  child: const Text(
-                    "Submit",
-                    style: TextStyle(color: Colors.white),
+                  child: Text(flag ? "Submit":"Send OTP", style: TextStyle(color: Colors.white),
                   ),
                 ),
                 // const SizedBox(height: 2),
@@ -112,45 +139,6 @@ class LogIn extends StatelessWidget {
                 const SizedBox(
                   height: 30,
                 ),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 90,
-                      child: Divider(),
-                    ),
-                    Text(" Or Continue With "),
-                    SizedBox(
-                      width: 90,
-                      child: Divider(),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      child: CircleAvatar(
-                          radius: 24,
-                          backgroundColor:
-                              const Color.fromARGB(255, 237, 237, 239),
-                          child: SvgPicture.asset('assets/icons/Google.svg')),
-                    ),
-                    const SizedBox(
-                      width: 18,
-                    ),
-                    InkWell(
-                      child: CircleAvatar(
-                          radius: 24,
-                          backgroundColor:
-                              const Color.fromARGB(255, 237, 237, 239),
-                          child: SvgPicture.asset('assets/icons/Calling.svg')),
-                    )
-                  ],
-                )
               ],
             ),
           ),

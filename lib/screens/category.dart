@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/model/category_model.dart';
+import 'package:home_mate/screens/drawer.dart';
 import 'package:home_mate/widgets/category_card.dart';
 
 class Categories extends StatefulWidget {
@@ -18,12 +19,16 @@ class _CategoriesState extends State<Categories> {
     return Scaffold(
       backgroundColor: clBG,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: Colors.white
+        ),
         title: const Text(
           "Category",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: clPrimary,
       ),
+      drawer: DrawerPage(),
       body: GridView.builder(
         padding:
             const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 80),
