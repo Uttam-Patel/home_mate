@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/model/service_model.dart';
+import 'package:home_mate/screens/providerdetail.dart';
 
 class ServiceCard extends StatelessWidget {
   final ServiceModel info;
@@ -8,17 +9,18 @@ class ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenwidth = MediaQuery.of(context).size.width * 1;
+    double screenheight = MediaQuery.of(context).size.height * 1;
     return Container(
       margin: const EdgeInsets.only(right: 20, top: 10),
-      height: 311,
-      width: 280,
+      height: screenheight * 0.3,
+      width: screenwidth * 0.7,
       decoration:
           BoxDecoration(color: clBG, borderRadius: BorderRadius.circular(25)),
       child: Stack(
         children: [
           Container(
-            height: 145,
-            width: 280,
+            height: screenheight * 0.2,
             decoration: BoxDecoration(
               color: clBG,
               borderRadius: const BorderRadius.only(
@@ -30,8 +32,8 @@ class ServiceCard extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 14,
-            top: 16,
+            left: screenwidth * 0.04,
+            top: screenheight * 0.015,
             child: Container(
               padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
@@ -49,7 +51,7 @@ class ServiceCard extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 128,
+            top: (screenheight * 0.2) - screenheight * 0.026,
             right: 20,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -61,16 +63,18 @@ class ServiceCard extends StatelessWidget {
               child: Text(
                 "\$${info.price.toString()}",
                 style: TextStyle(
-                    color: clBG, fontWeight: FontWeight.bold, fontSize: 16),
+                  color: clBG,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
             ),
           ),
           Positioned(
-            top: 145,
+            top: screenheight * 0.2,
             child: Container(
               padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
-              height: 166,
-              width: 280,
+              height: screenheight * 0.2,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(25),
@@ -128,7 +132,7 @@ class ServiceCard extends StatelessWidget {
                   Text(
                     info.name,
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 17,
                       fontWeight: FontWeight.bold,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -137,20 +141,30 @@ class ServiceCard extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundImage: AssetImage(info.provider.profileUrl),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        "${info.provider.fName} ${info.provider.lName}",
-                        style: TextStyle(fontSize: 16, color: clBody),
-                      )
-                    ],
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProviderDetails(),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 20,
+                          backgroundImage: AssetImage(info.provider.profileUrl),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "${info.provider.fName} ${info.provider.lName}",
+                          style: TextStyle(fontSize: 14, color: clBody),
+                        )
+                      ],
+                    ),
                   )
                 ],
               ),

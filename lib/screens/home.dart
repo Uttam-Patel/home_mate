@@ -37,16 +37,17 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    double imgHeight = 250;
-    double imgWidth = MediaQuery.of(context).size.width;
+    double screenwidth = MediaQuery.of(context).size.width * 1;
+    double screenheight = MediaQuery.of(context).size.height * 1;
 
     return Scaffold(
       backgroundColor: clBG,
       body: ListView(
         children: [
-          topSearchSlider(imgHeight, imgWidth),
-          homeCategories(imgWidth),
-          homeServices(imgWidth),
+          // Text(screenwidth.toString()),
+          topSearchSlider(screenwidth, screenheight),
+          homeCategories(screenwidth, screenheight),
+          homeServices(screenwidth, screenheight),
           const SizedBox(
             height: 60,
           ),
@@ -55,13 +56,12 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Container homeServices(double imgWidth) {
+  Container homeServices(double screenwidth, double screenheight) {
     return Container(
-      padding:
-          EdgeInsets.symmetric(horizontal: (imgWidth - 380) / 2, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       margin: const EdgeInsets.only(top: 20),
       color: clContainer,
-      width: 380,
+      // width: screenwidth * 0.,
       child: Column(
         children: [
           Row(
@@ -102,11 +102,13 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Container homeCategories(double imgWidth) {
+  Container homeCategories(double screenwidth, double screenheight) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: (imgWidth - 380) / 2),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+      ),
       margin: const EdgeInsets.only(top: 60),
-      width: 380,
+      // width: screenwidth * 0.9,
       child: Column(
         children: [
           Row(
@@ -155,9 +157,9 @@ class _HomeState extends State<Home> {
               for (int i = 0; i <= 5; i++)
                 CategoryCard(
                   category: categories[i],
-                  height: 140,
-                  width: 120,
-                  font: 19,
+                  height: screenheight * 0.17,
+                  width: screenwidth * 0.25,
+                  font: 12,
                 ),
             ],
           ),
@@ -166,13 +168,13 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Stack topSearchSlider(double imgHeight, double imgWidth) {
+  Stack topSearchSlider(double screenwidth, double screenheight) {
     return Stack(
       clipBehavior: Clip.none,
       children: [
         SizedBox(
-          height: imgHeight,
-          width: imgWidth,
+          height: screenheight * 0.27,
+          width: screenwidth,
           child: PageView.builder(
             controller: imgSliderController,
             onPageChanged: (value) {
@@ -199,8 +201,8 @@ class _HomeState extends State<Home> {
           ),
         ),
         Positioned(
-          top: imgHeight / 1.3,
-          left: (imgWidth - (6 * (sliderImages.length) + 20)) / 2,
+          top: screenheight * 0.2,
+          left: (screenwidth - (6 * (sliderImages.length) + 20)) / 2,
           child: Row(
             children: [
               ...List.generate(
@@ -234,15 +236,15 @@ class _HomeState extends State<Home> {
           ),
         ),
         Positioned(
-          top: imgHeight - 30,
-          left: (imgWidth - 380) / 2,
+          top: screenheight * 0.27 - 30,
+          left: (screenwidth - (screenwidth * 0.9)) / 2,
           child: SizedBox(
-            width: 380,
+            width: screenwidth * 0.9,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  width: 300,
+                  width: screenwidth * 0.7,
                   height: 60,
                   padding: const EdgeInsets.only(left: 10),
                   decoration: BoxDecoration(

@@ -17,16 +17,16 @@ class _EditProfileState extends State<EditProfile> {
       value: 'India',
     ),
     const DropDownValueModel(
-      name: "Pakistan",
-      value: "Pakistan",
+      name: "Nepal",
+      value: "Nepal",
     ),
     const DropDownValueModel(
-      name: 'America',
-      value: 'America',
+      name: 'Bangladesh',
+      value: 'Bangladesh',
     ),
     const DropDownValueModel(
-      name: 'London',
-      value: 'London',
+      name: 'Shri Lanka',
+      value: 'Shri Lanka',
     )
   ];
   @override
@@ -37,6 +37,8 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    double screenwidth = MediaQuery.of(context).size.width * 1;
+    double screenheight = MediaQuery.of(context).size.height * 1;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: clPrimary,
@@ -47,31 +49,24 @@ class _EditProfileState extends State<EditProfile> {
           ),
         ),
       ),
-      body: Column(
+      body: ListView(
         children: [
           Stack(
             children: [
-              const Center(
+              Center(
                 child: SizedBox(
-                  width: 100,
-                  height: 120,
+                  width: screenwidth * 0.3,
+                  height: screenheight * 0.15,
                   child: CircleAvatar(
                     backgroundImage: AssetImage('assets/images/Image.png'),
                   ),
                 ),
               ),
               Positioned(
-                top: MediaQuery.of(context).size.width * 0.187,
-                left: MediaQuery.of(context).size.width * 0.53,
+                top: screenheight * 0.1,
+                left: screenwidth * 0.55,
                 child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const EditProfile(),
-                      ),
-                    );
-                  },
+                  onTap: () {},
                   child: SvgPicture.asset(
                     'assets/icons/Camera.svg',
                     fit: BoxFit.cover,
@@ -81,9 +76,9 @@ class _EditProfileState extends State<EditProfile> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(
-              left: 10,
-              right: 10,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 12,
             ),
             child: Column(
               children: [
@@ -100,9 +95,8 @@ class _EditProfileState extends State<EditProfile> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-              left: 10,
-              right: 10,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
             ),
             child: SizedBox(
               width: double.infinity,
@@ -113,7 +107,7 @@ class _EditProfileState extends State<EditProfile> {
                 child: const Text(
                   "Save",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     color: Colors.white,
                   ),
                 ),

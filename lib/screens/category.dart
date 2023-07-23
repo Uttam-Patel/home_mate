@@ -13,6 +13,8 @@ class Categories extends StatefulWidget {
 class _CategoriesState extends State<Categories> {
   @override
   Widget build(BuildContext context) {
+    double screenwidth = MediaQuery.of(context).size.width * 1;
+    double screenheight = MediaQuery.of(context).size.height * 1;
     return Scaffold(
       backgroundColor: clBG,
       appBar: AppBar(
@@ -23,7 +25,8 @@ class _CategoriesState extends State<Categories> {
         backgroundColor: clPrimary,
       ),
       body: GridView.builder(
-        padding: const EdgeInsets.only(top: 20, bottom: 80),
+        padding:
+            const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 80),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 10,
@@ -32,9 +35,9 @@ class _CategoriesState extends State<Categories> {
         itemCount: categories.length,
         itemBuilder: (context, index) => CategoryCard(
           category: categories[index],
-          height: 200,
-          width: 190,
-          font: 21,
+          height: screenheight * 0.2,
+          width: screenwidth * 0.4,
+          font: 15,
         ),
       ),
     );
