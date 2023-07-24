@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:home_mate/firebase_options.dart';
+
+import 'package:home_mate/screens/splashscreen.dart';
+import 'package:home_mate/screens/welcome.dart';
+import 'package:home_mate/widgets/bottom_nav.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:home_mate/widgets/bottom_nav.dart';
 
@@ -26,7 +31,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.workSansTextTheme(),
       ),
-      home: const NavBar(index: 0),
+      home:  SplashScreen(),
     );
   }
 }

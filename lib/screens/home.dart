@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/model/category_model.dart';
 import 'package:home_mate/model/service_model.dart';
+import 'package:home_mate/screens/drawer.dart';
 import 'package:home_mate/widgets/bottom_nav.dart';
 import 'package:home_mate/widgets/category_card.dart';
 import 'package:home_mate/widgets/services_card.dart';
@@ -42,6 +43,15 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       backgroundColor: clBG,
+      appBar: AppBar(
+        // automaticallyImplyLeading: false,
+        backgroundColor: clPrimary,
+        iconTheme: IconThemeData(
+          color: Colors.white
+        ),
+        title: Text("Home Mate",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 25),),
+      ),
+      drawer: DrawerPage(),
       body: ListView(
         children: [
           // Text(screenwidth.toString()),
