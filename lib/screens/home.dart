@@ -82,7 +82,7 @@ class _HomeState extends State<Home> {
                 "Services",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 22,
+                  fontSize: 20,
                 ),
               ),
               TextButton(
@@ -90,7 +90,7 @@ class _HomeState extends State<Home> {
                 child: Text(
                   "View All",
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 14,
                     color: clBody,
                   ),
                 ),
@@ -98,12 +98,13 @@ class _HomeState extends State<Home> {
             ],
           ),
           SizedBox(
-            height: 311,
+            height: screenheight * 0.42,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: demoServices.length,
               itemBuilder: (context, index) => ServiceCard(
                 info: demoServices[index],
+                width: screenwidth * 0.8,
               ),
             ),
           ),
@@ -129,7 +130,7 @@ class _HomeState extends State<Home> {
                 "Category",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 22,
+                  fontSize: 20,
                 ),
               ),
               TextButton(
@@ -149,7 +150,7 @@ class _HomeState extends State<Home> {
                 child: Text(
                   "View All",
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 14,
                     color: clBody,
                   ),
                 ),

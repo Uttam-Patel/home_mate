@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_mate/constant/colors.dart';
+import 'package:home_mate/model/service_model.dart';
 
 class ServiceDetail extends StatefulWidget {
-  const ServiceDetail({super.key});
+  final ServiceModel info;
+  const ServiceDetail({super.key, required this.info});
 
   @override
   State<ServiceDetail> createState() => _ServiceDetailState();
 }
 
 class _ServiceDetailState extends State<ServiceDetail> {
+  late ServiceModel info;
+  @override
+  void initState() {
+    info = widget.info;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    double imageheight = MediaQuery.of(context).size.height * 0.50;
-    //double phoneheight = MediaQuery.of(context).size.height * 1.0;
-    double containerheight = MediaQuery.of(context).size.width * 0.7;
+    double screenwidth = MediaQuery.of(context).size.width * 1;
+    double screenheight = MediaQuery.of(context).size.height * 1;
     return Scaffold(
       backgroundColor: clBorder,
       body: ListView(
@@ -22,207 +30,160 @@ class _ServiceDetailState extends State<ServiceDetail> {
           Stack(
             clipBehavior: Clip.none,
             children: [
-              SizedBox(
-                width: double.infinity,
-                height: imageheight,
-                child: const Image(
-                  fit: BoxFit.cover,
-                  image: AssetImage(
-                    "assets/images/servicecover1.png",
+              Container(
+                width: screenwidth,
+                height: screenheight * 0.45,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(info.coverImg),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
               Positioned(
-                top: (imageheight - (containerheight / 2)),
-                left: ((MediaQuery.of(context).size.width * 1 -
-                        MediaQuery.of(context).size.width * 0.9) /
-                    2),
+                top: (screenheight * 0.45 - ((screenheight * 0.3) / 2)),
+                left: ((screenwidth - screenwidth * 0.9) / 2),
                 child: Container(
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
                       20,
                     ),
                     color: Colors.white,
                   ),
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: containerheight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 20,
-                      top: 20,
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            const Text(
-                              'Electronics',
-                              style: TextStyle(
-                                color: Colors.deepPurple,
-                                fontSize: 18,
-                              ),
+                  width: screenwidth * 0.9,
+                  height: screenheight * 0.3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            info.category,
+                            style: const TextStyle(
+                              color: Colors.deepPurple,
+                              fontSize: 14,
                             ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: clPrimary,
-                              size: 16,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            const Text(
-                              'Installation',
-                              style: TextStyle(
-                                fontSize: 17,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        const Row(
-                          children: [
-                            Text(
-                              "TV Wall Mount Installation",
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "\$500",
-                              style: TextStyle(
-                                fontSize: 22,
-                                color: clPrimary,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            const Column(
-                              children: [
-                                Text("10% off"),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            right: 20,
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            color: clPrimary,
+                            size: 16,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          const Text(
+                            'Installation',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        info.name,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "\$${info.price}",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: clPrimary,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          const Column(
                             children: [
-                              const Text(
-                                "Duration:",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              Text("10% off"),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Duration:",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "01 Hour",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: clPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Rating:",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.star,
+                                color: Colors.orange,
+                              ),
+                              const SizedBox(
+                                width: 5,
                               ),
                               Text(
-                                "01 Hour",
+                                "4.5",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 14,
                                   color: clPrimary,
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            right: 20,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                "Rating:",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.star,
-                                    color: Colors.orange,
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    "4.5",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: clPrimary,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(
-                    30,
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        100,
-                      ),
-                      color: Colors.white,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(7),
-                      child: SvgPicture.asset(
-                        'assets/icons/Heart.svg',
-                        fit: BoxFit.cover,
-                        width: 30,
-                        height: 30,
-                      ),
-                    ),
+              Positioned(
+                right: 15,
+                top: 15,
+                child: CircleAvatar(
+                  radius: 17,
+                  backgroundColor: clBG,
+                  child: SvgPicture.asset(
+                    'assets/icons/Heart.svg',
+                    fit: BoxFit.cover,
+                    width: 20,
+                    height: 20,
                   ),
                 ),
-              ),
+              )
             ],
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              top: (containerheight / 2),
-              left: 20,
-              right: 20,
-            ),
+          Container(
+            margin: EdgeInsets.only(top: (screenheight * 0.3 / 2) + 10),
+            padding: const EdgeInsets.all(12),
             child: Column(
               children: [
                 Container(
@@ -235,7 +196,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                           Text(
                             "Description",
                             style: TextStyle(
-                              fontSize: 25,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           )
@@ -244,128 +205,144 @@ class _ServiceDetailState extends State<ServiceDetail> {
                       const SizedBox(
                         height: 10,
                       ),
-                      const Text(
-                        "It is a long established fact that  a reader will be distracted by the readable content of a when looking at its layout",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
+                      Text(
+                        info.description,
                       ),
                       const SizedBox(
                         height: 20,
                       ),
                       Container(
+                        padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(
                             20,
                           ),
                           color: Colors.white,
                         ),
-                        child: const Padding(
-                          padding: EdgeInsets.only(
-                            bottom: 20,
-                            top: 20,
-                            left: 20,
-                            right: 20,
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    radius: 50,
-                                    child: Image(
-                                      fit: BoxFit.cover,
-                                      image:
-                                          AssetImage('assets/images/Image.png'),
+                        child: Column(
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  backgroundImage:
+                                      AssetImage(info.provider.profileUrl),
+                                  radius: screenheight * 0.04,
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${info.provider.fName} ${info.provider.lName}",
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: 25,
-                                      ),
-                                      Text(
-                                        "Gor Darshil",
-                                        style: TextStyle(
-                                          fontSize: 23,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(
+                                    Row(
+                                      children: [
+                                        ...List.generate(
+                                          5,
+                                          (index) {
+                                            if (info.rating - index >= 1) {
+                                              return const Icon(
                                                 Icons.star,
                                                 color: Colors.orange,
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ),
-                                              Text("4.5"),
-                                            ],
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.mail,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text("gordarshilk2002@gmail.com"),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.location_on_outlined,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    "Gandhinagar,Gujarat",
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.phone,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    "+91 9409529203",
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                                size: 20,
+                                              );
+                                            } else if (info.rating - index >=
+                                                    0 &&
+                                                info.rating - index < 1) {
+                                              return ShaderMask(
+                                                blendMode: BlendMode.modulate,
+                                                shaderCallback: (Rect bounds) {
+                                                  return LinearGradient(
+                                                    begin:
+                                                        Alignment.centerRight,
+                                                    end: Alignment.centerLeft,
+                                                    colors: [
+                                                      clBody,
+                                                      Colors.orange
+                                                    ],
+                                                  ).createShader(bounds);
+                                                },
+                                                child: const Icon(
+                                                  Icons.star,
+                                                  color: Colors.white,
+                                                  size: 20,
+                                                ),
+                                              );
+                                            } else {
+                                              return Icon(
+                                                Icons.star,
+                                                color: clBody,
+                                                size: 20,
+                                              );
+                                            }
+                                          },
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(info.provider.rating.toString()),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.mail,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(info.provider.email),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.location_on_outlined,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  info.provider.location,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.phone,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  info.provider.phone,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(
