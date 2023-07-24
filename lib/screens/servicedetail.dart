@@ -179,7 +179,18 @@ class _ServiceDetailState extends State<ServiceDetail> {
                     height: 20,
                   ),
                 ),
-              )
+              ),
+              Positioned(
+                left: 15,
+                top: 15,
+                child: InkWell(
+                  onTap: () => Navigator.pop(context),
+                  child: CircleAvatar(
+                      radius: 17,
+                      backgroundColor: clBG,
+                      child: const Icon(Icons.arrow_back)),
+                ),
+              ),
             ],
           ),
           Container(

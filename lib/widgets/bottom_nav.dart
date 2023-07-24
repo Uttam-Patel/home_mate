@@ -47,12 +47,15 @@ class _NavBarState extends State<NavBar> {
                 currentScreen = screens[index];
                 setState(() {});
               },
-              child: SvgPicture.asset(
-                (index == 0)
-                    ? "assets/icons/Home1.svg"
-                    : "assets/icons/Home.svg",
-                height: 23,
-                width: 23,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  (index == 0)
+                      ? "assets/icons/Home1.svg"
+                      : "assets/icons/Home.svg",
+                  height: 23,
+                  width: 23,
+                ),
               ),
             ),
             InkWell(
@@ -61,12 +64,15 @@ class _NavBarState extends State<NavBar> {
                 currentScreen = screens[index];
                 setState(() {});
               },
-              child: SvgPicture.asset(
-                (index == 1)
-                    ? "assets/icons/Ticket1.svg"
-                    : "assets/icons/Ticket.svg",
-                height: 23,
-                width: 23,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  (index == 1)
+                      ? "assets/icons/Ticket1.svg"
+                      : "assets/icons/Ticket.svg",
+                  height: 23,
+                  width: 23,
+                ),
               ),
             ),
             InkWell(
@@ -75,12 +81,15 @@ class _NavBarState extends State<NavBar> {
                 currentScreen = screens[index];
                 setState(() {});
               },
-              child: SvgPicture.asset(
-                (index == 2)
-                    ? "assets/icons/Category1.svg"
-                    : "assets/icons/Category.svg",
-                height: 23,
-                width: 23,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  (index == 2)
+                      ? "assets/icons/Category1.svg"
+                      : "assets/icons/Category.svg",
+                  height: 23,
+                  width: 23,
+                ),
               ),
             ),
             InkWell(
@@ -89,12 +98,15 @@ class _NavBarState extends State<NavBar> {
                 currentScreen = screens[index];
                 setState(() {});
               },
-              child: SvgPicture.asset(
-                (index == 3)
-                    ? "assets/icons/Chat1.svg"
-                    : "assets/icons/Chat.svg",
-                height: 23,
-                width: 23,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  (index == 3)
+                      ? "assets/icons/Chat1.svg"
+                      : "assets/icons/Chat.svg",
+                  height: 23,
+                  width: 23,
+                ),
               ),
             ),
             InkWell(
@@ -103,12 +115,15 @@ class _NavBarState extends State<NavBar> {
                 currentScreen = screens[index];
                 setState(() {});
               },
-              child: SvgPicture.asset(
-                (index == 4)
-                    ? "assets/icons/Profile1.svg"
-                    : "assets/icons/Profile.svg",
-                height: 23,
-                width: 23,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  (index == 4)
+                      ? "assets/icons/Profile1.svg"
+                      : "assets/icons/Profile.svg",
+                  height: 23,
+                  width: 23,
+                ),
               ),
             ),
           ],

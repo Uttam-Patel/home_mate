@@ -59,7 +59,7 @@ class _ProviderDetailsState extends State<ProviderDetails> {
                       Text(
                         "${info.fName} ${info.lName}",
                         style: const TextStyle(
-                          fontSize: 23,
+                          fontSize: 20,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
