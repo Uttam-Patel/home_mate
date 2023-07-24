@@ -91,6 +91,9 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                   "09:00:00",
                   "Tom",
                   "Cash"),
+              const SizedBox(
+                height: 60,
+              ),
             ],
           ),
         ),

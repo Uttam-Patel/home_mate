@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/model/provider_model.dart';
+import 'package:home_mate/model/service_model.dart';
+import 'package:home_mate/widgets/services_card.dart';
 
 class ProviderDetails extends StatefulWidget {
   final ProviderUserModel provider;
@@ -42,7 +44,6 @@ class _ProviderDetailsState extends State<ProviderDetails> {
               child: Row(
                 children: [
                   CircleAvatar(
-                    backgroundColor: Colors.white,
                     backgroundImage: AssetImage(
                       info.profileUrl,
                     ),
@@ -66,9 +67,40 @@ class _ProviderDetailsState extends State<ProviderDetails> {
                       Text(info.tagline),
                       Row(
                         children: [
-                          const Icon(
-                            Icons.star,
-                            color: Colors.orange,
+                          ...List.generate(
+                            5,
+                            (index) {
+                              if (info.rating - index >= 1) {
+                                return const Icon(
+                                  Icons.star,
+                                  color: Colors.orange,
+                                  size: 20,
+                                );
+                              } else if (info.rating - index >= 0 &&
+                                  info.rating - index < 1) {
+                                return ShaderMask(
+                                  blendMode: BlendMode.modulate,
+                                  shaderCallback: (Rect bounds) {
+                                    return LinearGradient(
+                                      begin: Alignment.centerRight,
+                                      end: Alignment.centerLeft,
+                                      colors: [clBody, Colors.orange],
+                                    ).createShader(bounds);
+                                  },
+                                  child: const Icon(
+                                    Icons.star,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                );
+                              } else {
+                                return Icon(
+                                  Icons.star,
+                                  color: clBody,
+                                  size: 20,
+                                );
+                              }
+                            },
                           ),
                           Text(info.rating.toString()),
                         ],
@@ -86,31 +118,24 @@ class _ProviderDetailsState extends State<ProviderDetails> {
               right: 20,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
-                  children: [
-                    Text(
-                      "About",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                const Text(
+                  "About",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.90,
-                      child: Text(
-                        info.description,
-                      ),
-                    ),
-                  ],
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  child: Text(
+                    info.description,
+                  ),
                 )
               ],
             ),
@@ -118,106 +143,97 @@ class _ProviderDetailsState extends State<ProviderDetails> {
           const SizedBox(
             height: 30,
           ),
-          Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    10,
-                  ),
-                  color: const Color(0xFFF6F7F9),
-                ),
-                width: MediaQuery.of(context).size.width * 0.85,
-                height: MediaQuery.of(context).size.width * 0.6,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                    // top: 5,
-                    // bottom: ,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          const Row(
-                            children: [
-                              Text(
-                                "Email",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                info.email,
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          const Row(
-                            children: [
-                              Text(
-                                "Number",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                info.phone,
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          const Row(
-                            children: [
-                              Text(
-                                "Member Since",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                info.joined.toString(),
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: screenwidth * 0.1),
+            padding: EdgeInsets.symmetric(horizontal: screenwidth * 0.05),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                10,
               ),
-            ],
+              color: const Color(0xFFF6F7F9),
+            ),
+            width: MediaQuery.of(context).size.width * 0.85,
+            height: MediaQuery.of(context).size.width * 0.6,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    const Row(
+                      children: [
+                        Text(
+                          "Email",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          info.email,
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    const Row(
+                      children: [
+                        Text(
+                          "Number",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          info.phone,
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    const Row(
+                      children: [
+                        Text(
+                          "Member Since",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          info.joined.toString(),
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
           const SizedBox(
             height: 30,
@@ -233,16 +249,39 @@ class _ProviderDetailsState extends State<ProviderDetails> {
                 Text(
                   "Services",
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text("View All"),
+                Text(
+                  "View All",
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
               ],
             ),
-          )
+          ),
+          homeServices(screenwidth, screenheight)
         ],
       ),
+    );
+  }
+
+  Column homeServices(double screenwidth, double screenheight) {
+    return Column(
+      children: [
+        for (int i = 0; i <= 5; i++)
+          Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            height: screenheight * 0.42,
+            width: screenwidth * 0.9,
+            child: ServiceCard(
+              info: demoServices[i],
+              width: screenwidth,
+            ),
+          ),
+      ],
     );
   }
 }
