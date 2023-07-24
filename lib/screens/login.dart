@@ -1,8 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_mate/constant/colors.dart';
-import 'package:home_mate/constant/var.dart';
 import 'package:home_mate/widgets/bottom_nav.dart';
 
 import 'sign_up.dart';
@@ -15,16 +13,14 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
-
   @override
   void initState() {
     super.initState();
   }
 
   late bool flag = false;
-  TextEditingController controller1 =TextEditingController();
-  TextEditingController controller2 =TextEditingController();
-
+  TextEditingController controller1 = TextEditingController();
+  TextEditingController controller2 = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,81 +39,89 @@ class _LogInState extends State<LogIn> {
                   height: 220,
                   width: 250,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/logIn.png")
-                    )
-                  ),
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/logIn.png"))),
                 ),
-                Text("Welcome",style: TextStyle(fontSize: 35,fontWeight: FontWeight.bold),),
+                Text(
+                  "Welcome",
+                  style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                ),
                 const Text(
                   "You Have Been Missed For Long Time ",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 15),
                 ),
-                 SizedBox(
-                   height: 10,
-                 ),
-                 TextField(
-                   controller: controller1,
-                     keyboardType: TextInputType.number,
-                     inputFormatters: [
-                       LengthLimitingTextInputFormatter(10),
-                     ],
+                SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                    controller: controller1,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(10),
+                    ],
                     decoration: InputDecoration(
-                        filled: true,
-                        enabled: !flag,
-                        fillColor: Color.fromARGB(255, 237, 237, 239),
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(12))),
-                        hintText: "Phone Number",
-                        )),
+                      filled: true,
+                      enabled: !flag,
+                      fillColor: Color.fromARGB(255, 237, 237, 239),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12))),
+                      hintText: "Phone Number",
+                    )),
                 const SizedBox(
                   height: 10,
                 ),
-                 Visibility(
-                   visible: flag,
-                   child: Column(
-                     mainAxisSize: MainAxisSize.min,
-                     mainAxisAlignment: MainAxisAlignment.center,
-                     crossAxisAlignment: CrossAxisAlignment.center,
-                     children: [
-                       TextField(
-                           controller: controller2,
-                           keyboardType: TextInputType.number,
-                           inputFormatters: [
-                             LengthLimitingTextInputFormatter(6),
-                           ],
+                Visibility(
+                  visible: flag,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextField(
+                          controller: controller2,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(6),
+                          ],
                           decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Color.fromARGB(255, 237, 237, 239),
-                              border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12))),
-                              hintText: "Enter OTP",
-                              )),
-                       SizedBox(
-                         height: 30,
-                       )
-                     ],
-                   ),
-                 ),
+                            filled: true,
+                            fillColor: Color.fromARGB(255, 237, 237, 239),
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12))),
+                            hintText: "Enter OTP",
+                          )),
+                      SizedBox(
+                        height: 30,
+                      )
+                    ],
+                  ),
+                ),
                 const SizedBox(
                   height: 5,
                 ),
                 ElevatedButton(
-                  onPressed: () async{
-                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) =>  NavBar(index: 0)), (route) => false);
-                      Navigator.push(
+                  onPressed: () async {
+                    Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) =>  NavBar(index: 0)));// Navigator.pop(context);
+                        MaterialPageRoute(
+                            builder: (context) => NavBar(index: 0)),
+                        (route) => false);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                NavBar(index: 0))); // Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                       fixedSize: const Size(330, 48),
                       backgroundColor: clPrimary,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
-                  child: Text(flag ? "Submit":"Send OTP", style: TextStyle(color: Colors.white),
+                  child: Text(
+                    flag ? "Submit" : "Send OTP",
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
                 // const SizedBox(height: 2),

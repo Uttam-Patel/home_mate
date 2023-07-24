@@ -1,7 +1,6 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:home_mate/constant/colors.dart';
-import 'package:home_mate/screens/drawer.dart';
 
 class BookingHistoryPage extends StatefulWidget {
   const BookingHistoryPage({super.key});
@@ -23,13 +22,13 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-            color: Colors.white
-        ),
+        iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: clPrimary,
-        title: const Text("Booking",style: TextStyle(color: Colors.white),),
+        title: const Text(
+          "Booking",
+          style: TextStyle(color: Colors.white),
+        ),
       ),
-      drawer: DrawerPage(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10.0),

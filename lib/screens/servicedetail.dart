@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/model/service_model.dart';
+import 'package:home_mate/screens/book_service.dart';
 
 class ServiceDetail extends StatefulWidget {
   final ServiceModel info;
@@ -662,7 +663,14 @@ class _ServiceDetailState extends State<ServiceDetail> {
         child: SizedBox(
           width: double.infinity,
           child: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) => const BookService()),
+                ),
+              );
+            },
             backgroundColor: clPrimary,
             child: const Text(
               "Continue",
