@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/screens/login.dart';
 import 'package:home_mate/widgets/bottom_nav.dart';
@@ -17,7 +16,7 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -28,72 +27,85 @@ class _SignUpState extends State<SignUp> {
                 Container(
                   height: 200,
                   width: 200,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage("assets/images/signUp.png")
-                      )
+                          image: AssetImage("assets/images/signUp.png"))),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Text(
+                    "We need some information about you before getting started !",
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Text("We need some information about you before getting started !",textAlign: TextAlign.center,),
+                const SizedBox(
+                  height: 10,
                 ),
-                SizedBox(height: 10,),
                 TextField(
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(10),
                     ],
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: Color.fromARGB(255, 237, 237, 239),
                       border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(12))),
+                          borderRadius: BorderRadius.all(Radius.circular(12))),
                       hintText: "First Name",
                     )),
-                SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 TextField(
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(10),
                     ],
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: Color.fromARGB(255, 237, 237, 239),
                       border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(12))),
+                          borderRadius: BorderRadius.all(Radius.circular(12))),
                       hintText: "Last Name",
                     )),
-                SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 TextField(
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(10),
                     ],
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: Color.fromARGB(255, 237, 237, 239),
                       border: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(12))),
+                          borderRadius: BorderRadius.all(Radius.circular(12))),
                       hintText: "Phone Number",
                     )),
-                SizedBox(height: 40,),
+                const SizedBox(
+                  height: 40,
+                ),
                 ElevatedButton(
-                  onPressed: () async{
-                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) =>  NavBar(index: 0)), (route) => false);
+                  onPressed: () async {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NavBar(index: 0)),
+                        (route) => false);
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) =>  NavBar(index: 0)));
+                        MaterialPageRoute(
+                            builder: (context) => const NavBar(index: 0)));
                   },
                   style: ElevatedButton.styleFrom(
                       fixedSize: const Size(330, 48),
                       backgroundColor: clPrimary,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12))),
-                  child: Text("Submit", style: TextStyle(color: Colors.white),
+                  child: const Text(
+                    "Submit",
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
                 Row(

@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/screens/welcome.dart';
@@ -23,9 +25,8 @@ class _SplashScreenState extends State<SplashScreen>
     _animationController!.forward();
     _animationController!.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  WelcomeScreen()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const WelcomeScreen()));
       }
     });
   }
@@ -50,7 +51,8 @@ class _SplashScreenState extends State<SplashScreen>
           ),
         );
       },
-      child: const YourSplashScreenContent(), // Replace with your own splash screen content
+      child:
+          const YourSplashScreenContent(), // Replace with your own splash screen content
     );
   }
 }
@@ -68,20 +70,28 @@ class YourSplashScreenContent extends StatelessWidget {
               height: 120,
               width: 120,
               child: Image.asset('assets/images/logo.png')),
-          SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           RichText(
             text: TextSpan(
-              style: TextStyle(color: Colors.black, fontSize: 65,fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 65,
+                  fontWeight: FontWeight.bold),
               children: <TextSpan>[
-                TextSpan(text: 'H', style: TextStyle(color: clPrimary,fontSize: 80)),
-                TextSpan(text: 'ome '),
-                TextSpan(text: 'M', style: TextStyle(color: clPrimary,fontSize: 80)),
-                TextSpan(text: 'ate '),
+                TextSpan(
+                    text: 'H',
+                    style: TextStyle(color: clPrimary, fontSize: 80)),
+                const TextSpan(text: 'ome '),
+                TextSpan(
+                    text: 'M',
+                    style: TextStyle(color: clPrimary, fontSize: 80)),
+                const TextSpan(text: 'ate '),
               ],
             ),
             textScaleFactor: 0.5,
           )
-
         ],
       ),
     );

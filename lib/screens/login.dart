@@ -38,11 +38,11 @@ class _LogInState extends State<LogIn> {
                 Container(
                   height: 220,
                   width: 250,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage("assets/images/logIn.png"))),
                 ),
-                Text(
+                const Text(
                   "Welcome",
                   style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                 ),
@@ -51,7 +51,7 @@ class _LogInState extends State<LogIn> {
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 15),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextField(
@@ -63,8 +63,8 @@ class _LogInState extends State<LogIn> {
                     decoration: InputDecoration(
                       filled: true,
                       enabled: !flag,
-                      fillColor: Color.fromARGB(255, 237, 237, 239),
-                      border: OutlineInputBorder(
+                      fillColor: const Color.fromARGB(255, 237, 237, 239),
+                      border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12))),
                       hintText: "Phone Number",
                     )),
@@ -84,7 +84,7 @@ class _LogInState extends State<LogIn> {
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(6),
                           ],
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             filled: true,
                             fillColor: Color.fromARGB(255, 237, 237, 239),
                             border: OutlineInputBorder(
@@ -92,7 +92,7 @@ class _LogInState extends State<LogIn> {
                                     BorderRadius.all(Radius.circular(12))),
                             hintText: "Enter OTP",
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       )
                     ],
@@ -106,13 +106,13 @@ class _LogInState extends State<LogIn> {
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => NavBar(index: 0)),
+                            builder: (context) => const NavBar(index: 0)),
                         (route) => false);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                NavBar(index: 0))); // Navigator.pop(context);
+                            builder: (context) => const NavBar(
+                                index: 0))); // Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                       fixedSize: const Size(330, 48),
@@ -121,7 +121,7 @@ class _LogInState extends State<LogIn> {
                           borderRadius: BorderRadius.circular(12))),
                   child: Text(
                     flag ? "Submit" : "Send OTP",
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
                 // const SizedBox(height: 2),

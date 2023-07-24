@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/screens/login.dart';
-import 'package:home_mate/widgets/bottom_nav.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -118,7 +117,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             context,
                             MaterialPageRoute(
                               // builder: (context) => const NavBar(index: 0),
-                              builder: (context) => LogIn(),
+                              builder: (context) => const LogIn(),
                             ),
                           );
                         } else {
@@ -157,7 +156,8 @@ List<WelcomePage> welcomePages = [
   WelcomePage(
     imgUrl: "assets/images/welcome_screen1.png",
     heading: "Welcome To HomeMate",
-    subHeading: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
+    subHeading:
+        "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
   ),
   WelcomePage(
     imgUrl: "assets/images/welcome_screen2.png",

@@ -57,7 +57,7 @@ class _EditProfileState extends State<EditProfile> {
                 child: SizedBox(
                   width: screenwidth * 0.3,
                   height: screenheight * 0.15,
-                  child: CircleAvatar(
+                  child: const CircleAvatar(
                     backgroundImage: AssetImage('assets/images/Image.png'),
                   ),
                 ),
