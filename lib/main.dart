@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/firebase_options.dart';
 
 import 'package:home_mate/screens/splashscreen.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Home mate',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: clPrimary),
         useMaterial3: true,
         textTheme: GoogleFonts.workSansTextTheme(),
       ),

@@ -21,7 +21,7 @@ class ServiceModel {
 
 List<ServiceModel> demoServices = [
   ServiceModel(
-    name: "Repait Broken ACs",
+    name: "Repair Broken ACs",
     coverImg: "assets/images/servicecover4.png",
     category: "AC Repair",
     description:

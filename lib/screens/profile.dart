@@ -1,7 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_mate/constant/colors.dart';
-import 'package:home_mate/screens/editprofile.dart';
+import 'package:home_mate/screens/settings/about_us.dart';
+import 'package:home_mate/screens/settings/change_contact.dart';
+import 'package:home_mate/screens/settings/editprofile.dart';
+import 'package:home_mate/screens/login.dart';
+import 'package:home_mate/screens/settings/help_and_support.dart';
+import 'package:home_mate/screens/settings/privacy_policy.dart';
+import 'package:home_mate/screens/settings/terms_and_conditions.dart';
+import 'package:home_mate/screens/settings/verify_email.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -11,6 +19,20 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  late User user;
+  late FirebaseAuth auth;
+  bool emailVerified = false;
+
+  String? profileUrl;
+  @override
+  void initState() {
+    super.initState();
+    auth = FirebaseAuth.instance;
+    user = auth.currentUser!;
+    profileUrl = user.photoURL;
+    emailVerified = user.emailVerified;
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenwidth = MediaQuery.of(context).size.width * 1;
@@ -25,15 +47,24 @@ class _ProfileState extends State<Profile> {
       ),
       body: ListView(
         children: [
+          const SizedBox(
+            height: 10,
+          ),
           Stack(
+            clipBehavior: Clip.none,
             children: [
               Center(
-                child: SizedBox(
-                  width: screenwidth * 0.3,
-                  height: screenheight * 0.15,
-                  child: const CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/Image.png'),
-                  ),
+                child: CircleAvatar(
+                  radius: screenheight * 0.075,
+                  backgroundColor: clBG,
+                  backgroundImage:
+                      (profileUrl != null) ? NetworkImage(profileUrl!) : null,
+                  child: (profileUrl == null)
+                      ? const Icon(
+                          Icons.person,
+                          size: 40,
+                        )
+                      : null,
                 ),
               ),
               Positioned(
@@ -59,21 +90,40 @@ class _ProfileState extends State<Profile> {
               ),
             ],
           ),
-          const Column(
+          const SizedBox(
+            height: 10,
+          ),
+          Column(
             children: [
               Text(
-                "Saul Armstrong",
-                style: TextStyle(
+                user.displayName!,
+                style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(
-                "saularmstrong@gmail.com",
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
+              (emailVerified)
+                  ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          user.email!,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        const Icon(Icons.verified),
+                      ],
+                    )
+                  : Text(
+                      user.email!,
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                    )
             ],
           ),
           const SizedBox(
@@ -82,348 +132,139 @@ class _ProfileState extends State<Profile> {
           Column(
             children: [
               Container(
-                padding: const EdgeInsets.only(left: 12),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
+                width: screenwidth,
                 color: clBG,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                        top: 9,
-                        bottom: 9,
-                      ),
-                      child: Text(
-                        "GENERAL",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: clPrimary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  ],
+                child: Text(
+                  "GENERAL",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: clPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 12,
-                      ),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            child: SvgPicture.asset(
-                              'assets/icons/mode.svg',
-                              height: 23,
-                              width: 23,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Text(
-                            "Dark Mode",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          //add switch of light dark mode.
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                        top: 10,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                child: SvgPicture.asset(
-                                  'assets/icons/Lock.svg',
-                                  height: 23,
-                                  width: 23,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Text(
-                                "Change Password",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(
-                              right: 10,
-                            ),
-                            child: Icon(
-                              Icons.keyboard_arrow_right_outlined,
-                              size: 28,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                        top: 10,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                child: SvgPicture.asset(
-                                  'assets/icons/Heart.svg',
-                                  height: 23,
-                                  width: 23,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Text(
-                                "Favourite Service",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(
-                              right: 10,
-                            ),
-                            child: Icon(
-                              Icons.keyboard_arrow_right_outlined,
-                              size: 28,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                        top: 10,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                child: SvgPicture.asset(
-                                  'assets/icons/Star.svg',
-                                  height: 23,
-                                  width: 23,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Text(
-                                "Rate Us",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(
-                              right: 10,
-                            ),
-                            child: Icon(
-                              Icons.keyboard_arrow_right_outlined,
-                              size: 28,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 16,
               ),
               Container(
-                color: clBG,
-                padding: const EdgeInsets.only(left: 12),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                        top: 9,
-                        bottom: 9,
-                      ),
-                      child: Text(
-                        "ABOUT APP",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: clPrimary,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                padding: const EdgeInsets.all(8),
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
+                    ListTile(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const ChangeContact()));
+                      },
+                      leading: const Icon(
+                        Icons.phone,
+                        size: 20,
                       ),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            child: SvgPicture.asset(
-                              'assets/icons/privacy.svg',
-                              height: 23,
-                              width: 23,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Text(
-                            "Privacy Policy",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                      title: const Text(
+                        "Change Contact",
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                        top: 10,
+                    ListTile(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const VerifyEmail()));
+
+                      },
+                      leading: const Icon(
+                        Icons.verified_user,
+                        size: 20,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                child: SvgPicture.asset(
-                                  'assets/icons/term.svg',
-                                  height: 23,
-                                  width: 23,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Text(
-                                "Terms & Conditions",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                      title: const Text(
+                        "Verify Email",
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                        top: 10,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                child: SvgPicture.asset(
-                                  'assets/icons/help.svg',
-                                  height: 23,
-                                  width: 23,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Text(
-                                "Help Support",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                        top: 10,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                child: SvgPicture.asset(
-                                  'assets/icons/about.svg',
-                                  height: 23,
-                                  width: 23,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Text(
-                                "About Us",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 14,
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
+                width: screenwidth,
+                color: clBG,
+                child: Text(
+                  "ABOUT APP",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: clPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  children: [
+                    ListTile(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const PrivacyPolicy()));
+
+                      },
+                      leading: SvgPicture.asset(
+                        'assets/icons/privacy.svg',
+                        height: 23,
+                        width: 23,
+                      ),
+                      title: const Text(
+                        "Privacy Policy",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const TermCondition()));
+
+                      },
+                      leading: SvgPicture.asset(
+                        'assets/icons/term.svg',
+                        height: 23,
+                        width: 23,
+                      ),
+                      title: const Text(
+                        "Terms & Conditions",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const HelpSupport()));
+
+                      },
+                      leading: SvgPicture.asset(
+                        'assets/icons/help.svg',
+                        height: 23,
+                        width: 23,
+                      ),
+                      title: const Text(
+                        "Help Support",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const AboutUs()));
+
+                      },
+                      leading: SvgPicture.asset(
+                        'assets/icons/about.svg',
+                        height: 23,
+                        width: 23,
+                      ),
+                      title: const Text(
+                        "About Us",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                    ),
+                  ],
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -432,7 +273,14 @@ class _ProfileState extends State<Profile> {
                   height: MediaQuery.of(context).size.width * 0.12,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: clPrimary),
-                    onPressed: () {},
+                    onPressed: () async {
+                      await FirebaseAuth.instance.signOut().then((value) =>
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LogIn()),
+                              (route) => false));
+                    },
                     child: const Text(
                       "Log Out",
                       style: TextStyle(fontSize: 16, color: Colors.white),
@@ -449,6 +297,4 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
-
-  darkmode(String labeltext, SvgPicture picture) {}
 }

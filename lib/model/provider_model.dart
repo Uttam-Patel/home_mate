@@ -1,4 +1,5 @@
 class ProviderUserModel {
+  final String id;
   final String fName;
   final String lName;
   final String email;
@@ -8,9 +9,10 @@ class ProviderUserModel {
   final String location;
   final double rating;
   final String phone;
-  final String joined;
+  final DateTime joined;
 
   ProviderUserModel({
+    required this.id,
     required this.fName,
     required this.lName,
     required this.email,
@@ -22,9 +24,32 @@ class ProviderUserModel {
     required this.phone,
     required this.joined,
   });
+
+  factory ProviderUserModel.fromMap(
+      Map<String,dynamic>map){
+    return ProviderUserModel(id:map['id'],fName: map['fName'], lName: map['lName'], email: map['email'], tagline: map['tagline'], description: map['description'], location: map['location'], rating: map['rating'], profileUrl: map['profileUrl'], phone: map['phone'], joined: DateTime.tryParse(map['joined'])!);
+  }
+
+  Map<String,dynamic> toMap(){
+    return {
+      "id": id,
+      "fName": fName,
+      "lName": lName,
+      "email": email,
+      "tagline": tagline,
+      "description": description,
+      "location": location,
+      "rating": rating,
+      "profileUrl": profileUrl,
+      "phone": phone,
+      "joined": joined.toIso8601String(),
+    };
+  }
+
 }
 
 ProviderUserModel demoProvider = ProviderUserModel(
+  id: "1",
   fName: "Wade",
   lName: "Warren",
   email: "demo@domain.com",
@@ -35,10 +60,11 @@ ProviderUserModel demoProvider = ProviderUserModel(
   tagline: "Electrician Export",
   profileUrl: "assets/images/servicecover4.png",
   phone: "0000000000",
-  joined: "2014",
+  joined: DateTime.utc(2014),
 );
 
 ProviderUserModel demoProvider1 = ProviderUserModel(
+  id: "2",
   fName: "Bhargav",
   lName: "Kavathiya",
   email: "dummy@domain.com",
@@ -49,5 +75,5 @@ ProviderUserModel demoProvider1 = ProviderUserModel(
   tagline: "Electrician Expert",
   profileUrl: "assets/images/servicecover3.png",
   phone: "0101010101",
-  joined: "2017",
+  joined: DateTime.utc(2017),
 );

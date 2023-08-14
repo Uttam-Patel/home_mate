@@ -1,8 +1,10 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/screens/welcome.dart';
+import 'package:home_mate/widgets/bottom_nav.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -25,8 +27,28 @@ class _SplashScreenState extends State<SplashScreen>
     _animationController!.forward();
     _animationController!.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const WelcomeScreen()));
+        User? user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          if (user.displayName != null && user.displayName != "") {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const NavBar(
+                          index: 0,
+                        )),
+                (route) => false);
+          } else {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+                (route) => false);
+          }
+        } else {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+              (route) => false);
+        }
       }
     });
   }
