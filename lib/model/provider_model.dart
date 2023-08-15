@@ -45,6 +45,13 @@ class ProviderUserModel {
       "joined": joined.toIso8601String(),
     };
   }
+  bool isEmpty(){
+    if(id.isEmpty){
+      return false;
+    }else{
+      return true;
+    }
+  }
 
 }
 

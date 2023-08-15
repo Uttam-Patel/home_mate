@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/model/provider_model.dart';
 import 'package:home_mate/model/service_model.dart';
@@ -44,7 +45,7 @@ class _ProviderDetailsState extends State<ProviderDetails> {
               child: Row(
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage(
+                    backgroundImage: NetworkImage(
                       info.profileUrl,
                     ),
                     radius: screenwidth * 0.13,
@@ -65,46 +66,7 @@ class _ProviderDetailsState extends State<ProviderDetails> {
                         ),
                       ),
                       Text(info.tagline),
-                      Row(
-                        children: [
-                          ...List.generate(
-                            5,
-                            (index) {
-                              if (info.rating - index >= 1) {
-                                return const Icon(
-                                  Icons.star,
-                                  color: Colors.orange,
-                                  size: 20,
-                                );
-                              } else if (info.rating - index >= 0 &&
-                                  info.rating - index < 1) {
-                                return ShaderMask(
-                                  blendMode: BlendMode.modulate,
-                                  shaderCallback: (Rect bounds) {
-                                    return LinearGradient(
-                                      begin: Alignment.centerRight,
-                                      end: Alignment.centerLeft,
-                                      colors: [clBody, Colors.orange],
-                                    ).createShader(bounds);
-                                  },
-                                  child: const Icon(
-                                    Icons.star,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                );
-                              } else {
-                                return Icon(
-                                  Icons.star,
-                                  color: clBody,
-                                  size: 20,
-                                );
-                              }
-                            },
-                          ),
-                          Text(info.rating.toString()),
-                        ],
-                      )
+                      printRating(info.rating),
                     ],
                   ),
                 ],
@@ -269,15 +231,16 @@ class _ProviderDetailsState extends State<ProviderDetails> {
   }
 
   Column homeServices(double screenwidth, double screenheight) {
+    List<ServiceModel> providerService = userServices.where((element) => element.provider["id"] == info.id).toList();
     return Column(
       children: [
-        for (int i = 0; i <= 5; i++)
+        for (int i = 0; i < providerService.length; i++)
           Container(
             margin: const EdgeInsets.only(bottom: 10),
             height: screenheight * 0.42,
             width: screenwidth * 0.9,
             child: ServiceCard(
-              info: demoServices[i],
+              info: userServices[i],
               width: screenwidth,
             ),
           ),

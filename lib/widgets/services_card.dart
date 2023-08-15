@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
+import 'package:home_mate/model/provider_model.dart';
 import 'package:home_mate/model/service_model.dart';
 import 'package:home_mate/screens/providerdetail.dart';
 import 'package:home_mate/screens/servicedetail.dart';
@@ -20,7 +22,8 @@ class ServiceCard extends StatelessWidget {
       decoration:
           BoxDecoration(color: clBG, borderRadius: BorderRadius.circular(25)),
       child: InkWell(
-        onTap: () {
+        onTap: () async {
+
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -38,7 +41,7 @@ class ServiceCard extends StatelessWidget {
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25)),
                 image: DecorationImage(
-                  image: AssetImage(info.coverImg),
+                  image: NetworkImage(info.coverUrl),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -74,7 +77,7 @@ class ServiceCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Text(
-                  "\$${info.price.toString()}",
+                  "₹${info.price.toString()}",
                   style: TextStyle(
                     color: clBG,
                     fontWeight: FontWeight.bold,
@@ -96,49 +99,7 @@ class ServiceCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        ...List.generate(
-                          5,
-                          (index) {
-                            if (info.rating - index >= 1) {
-                              return const Icon(
-                                Icons.star,
-                                color: Colors.orange,
-                                size: 20,
-                              );
-                            } else if (info.rating - index >= 0 &&
-                                info.rating - index < 1) {
-                              return ShaderMask(
-                                blendMode: BlendMode.modulate,
-                                shaderCallback: (Rect bounds) {
-                                  return LinearGradient(
-                                    begin: Alignment.centerRight,
-                                    end: Alignment.centerLeft,
-                                    colors: [clBody, Colors.orange],
-                                  ).createShader(bounds);
-                                },
-                                child: const Icon(
-                                  Icons.star,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              );
-                            } else {
-                              return Icon(
-                                Icons.star,
-                                color: clBody,
-                                size: 20,
-                              );
-                            }
-                          },
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(info.rating.toString()),
-                      ],
-                    ),
+                    printRating(info.rating),
                     const SizedBox(
                       height: 10,
                     ),
@@ -160,7 +121,7 @@ class ServiceCard extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProviderDetails(
-                              provider: info.provider,
+                              provider: ProviderUserModel.fromMap(info.provider),
                             ),
                           ),
                         );
@@ -170,13 +131,13 @@ class ServiceCard extends StatelessWidget {
                           CircleAvatar(
                             radius: 20,
                             backgroundImage:
-                                AssetImage(info.provider.profileUrl),
+                                NetworkImage(ProviderUserModel.fromMap(info.provider).profileUrl),
                           ),
                           const SizedBox(
                             width: 10,
                           ),
                           Text(
-                            "${info.provider.fName} ${info.provider.lName}",
+                            "${ProviderUserModel.fromMap(info.provider).fName} ${ProviderUserModel.fromMap(info.provider).lName}",
                             style: TextStyle(fontSize: 14, color: clBody),
                           )
                         ],

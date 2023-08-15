@@ -44,6 +44,8 @@ dependencies:
   image_cropper: ^5.0.0
   firebase_storage: ^11.2.5
   cloud_firestore: ^4.8.4
+  dotted_border: ^2.0.0+3
+  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/model/category_model.dart';
 import 'package:home_mate/widgets/category_card.dart';
@@ -33,9 +34,9 @@ class _CategoriesState extends State<Categories> {
           crossAxisSpacing: screenwidth * 0.1,
           mainAxisSpacing: screenheight * 0.03,
         ),
-        itemCount: categories.length,
+        itemCount: userCategories.length,
         itemBuilder: (context, index) => CategoryCard(
-          category: categories[index],
+          category: userCategories[index],
           height: screenheight * 0.18,
           width: screenwidth * 0.4,
           font: 14,

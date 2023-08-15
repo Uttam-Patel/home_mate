@@ -1,44 +1,28 @@
 class CategoryModel {
-  final String name;
-  final String iconUrl;
+  String id;
+  String name;
+  List subCategories;
+  String coverUrl;
 
-  CategoryModel({
-    required this.name,
-    required this.iconUrl,
-  });
+  CategoryModel(
+      {required this.id,
+      required this.name,
+      required this.subCategories,
+      required this.coverUrl});
+
+  factory CategoryModel.fromMap(Map<String, dynamic> map) {
+    return CategoryModel(
+        id: map['id'],
+        name: map['name'],
+        subCategories: map['subCategories'],
+        coverUrl: map['coverUrl']);
+  }
+  Map<String, dynamic> toMap() {
+    return {
+      "id": id,
+      "name": name,
+      "subCategories": subCategories,
+      "coverUrl": coverUrl,
+    };
+  }
 }
-
-List<CategoryModel> categories = [
-  CategoryModel(
-    name: "Plumber",
-    iconUrl: "assets/icons/plumber.png",
-  ),
-  CategoryModel(
-    name: "Carpenter",
-    iconUrl: "assets/icons/carpenter.png",
-  ),
-  CategoryModel(
-    name: "Painting",
-    iconUrl: "assets/icons/painting.png",
-  ),
-  CategoryModel(
-    name: "Salon",
-    iconUrl: "assets/icons/salon.png",
-  ),
-  CategoryModel(
-    name: "Smart Home",
-    iconUrl: "assets/icons/smarthome.png",
-  ),
-  CategoryModel(
-    name: "AC Repair",
-    iconUrl: "assets/icons/acrepair.png",
-  ),
-  CategoryModel(
-    name: "Security",
-    iconUrl: "assets/icons/security.png",
-  ),
-  CategoryModel(
-    name: "AC Repair",
-    iconUrl: "assets/icons/pestcontrol.png",
-  ),
-];

@@ -33,6 +33,7 @@ class CategoryCard extends StatelessWidget {
       child: Column(
         children: [
           Container(
+            padding: const EdgeInsets.all(12),
             width: width,
             height: height * 0.7,
             alignment: Alignment.center,
@@ -43,10 +44,10 @@ class CategoryCard extends StatelessWidget {
                 topRight: Radius.circular(20),
               ),
             ),
-            child: Image.asset(
-              category.iconUrl,
-              height: height / 3,
-              width: height / 3,
+            child: Image.network(
+              category.coverUrl,
+              // height: height / 3,
+              // width: height / 3,
               fit: BoxFit.fill,
             ),
           ),

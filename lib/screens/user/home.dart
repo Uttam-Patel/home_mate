@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
-import 'package:home_mate/model/category_model.dart';
-import 'package:home_mate/model/service_model.dart';
+import 'package:home_mate/screens/search.dart';
 import 'package:home_mate/widgets/bottom_nav.dart';
 import 'package:home_mate/widgets/category_card.dart';
 import 'package:home_mate/widgets/services_card.dart';
@@ -93,11 +93,13 @@ class _HomeState extends State<Home> {
             height: screenheight * 0.42,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: demoServices.length,
-              itemBuilder: (context, index) => ServiceCard(
-                info: demoServices[index],
-                width: screenwidth * 0.8,
-              ),
+              itemCount: userServices.length,
+              itemBuilder: (context, index) {
+                return ServiceCard(
+                  info: userServices[index],
+                  width: screenwidth * 0.8,
+                );
+              }
             ),
           ),
         ],
@@ -157,9 +159,9 @@ class _HomeState extends State<Home> {
             spacing: 10,
             runSpacing: 15,
             children: [
-              for (int i = 0; i <= 5; i++)
+              for (int i = 0; i < userCategories.length; i++)
                 CategoryCard(
-                  category: categories[i],
+                  category: userCategories[i],
                   height: screenheight * 0.17,
                   width: screenwidth * 0.25,
                   font: 12,
@@ -243,39 +245,45 @@ class _HomeState extends State<Home> {
           left: (screenwidth - (screenwidth * 0.9)) / 2,
           child: SizedBox(
             width: screenwidth * 0.9,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: screenwidth * 0.7,
-                  height: 60,
-                  padding: const EdgeInsets.only(left: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      hintText: "Search Services",
-                      border: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                    ),
-                  ),
-                ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
+            child: GestureDetector(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>const SearchService(),),);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: screenwidth * 0.7,
                     height: 60,
-                    width: 60,
-                    color: Colors.white,
-                    child: const Icon(
-                      Icons.search_outlined,
-                      size: 30,
+                    padding: const EdgeInsets.only(left: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                    ),
+                    child: const TextField(
+                      enabled: false,
+                      decoration: InputDecoration(
+                        hintText: "Search Services",
+                        border: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      color: Colors.white,
+                      child: const Icon(
+                        Icons.search_outlined,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:home_mate/config.dart';
+import 'package:home_mate/screens/admin/admin_home.dart';
+import 'package:home_mate/screens/provider/provider_home.dart';
 import 'package:home_mate/screens/user/booking_status.dart';
 import 'package:home_mate/screens/user/category.dart';
 import 'package:home_mate/screens/chat.dart';
@@ -15,12 +18,16 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  List<Widget> screens = const [
-    Home(),
-    BookingHistoryPage(),
-    Categories(),
-    Chat(),
-    Profile(),
+  List<Widget> screens = [
+    (type == "admin")
+        ? const AdminHome()
+        : (type == "provider")
+            ? const ProviderHome()
+            : const Home(),
+    const BookingHistoryPage(),
+    const Categories(),
+    const Chat(),
+    const Profile(),
   ];
   late Widget currentScreen;
   late int index;

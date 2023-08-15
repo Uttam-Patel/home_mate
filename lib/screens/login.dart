@@ -192,10 +192,12 @@ class _LogInState extends State<LogIn> {
         },
         verificationCompleted: (PhoneAuthCredential credential) async {
           await auth.signInWithCredential(credential).then(
-            (value) {
+            (value) async{
               User? user = auth.currentUser;
               if (user != null) {
                 if (user.displayName != null) {
+                  await getUserDetails(user);
+                  // ignore: use_build_context_synchronously
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
@@ -233,13 +235,17 @@ class _LogInState extends State<LogIn> {
           User? user = value.user;
           if (user != null) {
             if (user.displayName != null && user.displayName! != "") {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const NavBar(
-                        index: 0,
-                      )),
-                      (route) => false);
+                await getUserDetails(user);
+                // ignore: use_build_context_synchronously
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const NavBar(
+                          index: 0,
+                        )),
+                        (route) => false);
+
+
             } else {
               Navigator.pushAndRemoveUntil(
                   context,

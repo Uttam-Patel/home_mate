@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
-import 'package:home_mate/screens/profile.dart';
+import 'package:home_mate/screens/user/profile.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 

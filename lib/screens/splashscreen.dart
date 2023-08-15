@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/screens/welcome.dart';
 import 'package:home_mate/widgets/bottom_nav.dart';
@@ -30,6 +31,7 @@ class _SplashScreenState extends State<SplashScreen>
         User? user = FirebaseAuth.instance.currentUser;
         if (user != null) {
           if (user.displayName != null && user.displayName != "") {
+            await getUserDetails(user);
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(

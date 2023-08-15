@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
+import 'package:home_mate/model/provider_model.dart';
 import 'package:home_mate/model/service_model.dart';
-import 'package:home_mate/screens/book_service.dart';
+import 'package:home_mate/screens/user/book_service.dart';
 
 class ServiceDetail extends StatefulWidget {
   final ServiceModel info;
@@ -14,9 +16,11 @@ class ServiceDetail extends StatefulWidget {
 
 class _ServiceDetailState extends State<ServiceDetail> {
   late ServiceModel info;
+  late ProviderUserModel provider;
   @override
   void initState() {
     info = widget.info;
+    provider = ProviderUserModel.fromMap(info.provider);
     super.initState();
   }
 
@@ -36,7 +40,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                 height: screenheight * 0.45,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(info.coverImg),
+                    image: NetworkImage(info.coverUrl),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -78,8 +82,8 @@ class _ServiceDetailState extends State<ServiceDetail> {
                           const SizedBox(
                             width: 5,
                           ),
-                          const Text(
-                            'Installation',
+                          Text(
+                            info.subCategory,
                             style: TextStyle(
                               fontSize: 14,
                             ),
@@ -93,25 +97,16 @@ class _ServiceDetailState extends State<ServiceDetail> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            "\$${info.price}",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: clPrimary,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          const Column(
-                            children: [
-                              Text("10% off"),
-                            ],
-                          ),
-                        ],
+                      Text(
+                        "₹${info.price}",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: clPrimary,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 15,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -152,7 +147,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                                 width: 5,
                               ),
                               Text(
-                                "4.5",
+                                info.rating.toString(),
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: clPrimary,
@@ -232,6 +227,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                           color: Colors.white,
                         ),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -239,7 +235,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                                 CircleAvatar(
                                   backgroundColor: Colors.white,
                                   backgroundImage:
-                                      AssetImage(info.provider.profileUrl),
+                                      NetworkImage(provider.profileUrl),
                                   radius: screenheight * 0.04,
                                 ),
                                 const SizedBox(
@@ -249,61 +245,14 @@ class _ServiceDetailState extends State<ServiceDetail> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "${info.provider.fName} ${info.provider.lName}",
+                                      "${provider.fName} ${provider.lName}",
                                       style: const TextStyle(
                                         fontSize: 18,
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Row(
-                                      children: [
-                                        ...List.generate(
-                                          5,
-                                          (index) {
-                                            if (info.rating - index >= 1) {
-                                              return const Icon(
-                                                Icons.star,
-                                                color: Colors.orange,
-                                                size: 20,
-                                              );
-                                            } else if (info.rating - index >=
-                                                    0 &&
-                                                info.rating - index < 1) {
-                                              return ShaderMask(
-                                                blendMode: BlendMode.modulate,
-                                                shaderCallback: (Rect bounds) {
-                                                  return LinearGradient(
-                                                    begin:
-                                                        Alignment.centerRight,
-                                                    end: Alignment.centerLeft,
-                                                    colors: [
-                                                      clBody,
-                                                      Colors.orange
-                                                    ],
-                                                  ).createShader(bounds);
-                                                },
-                                                child: const Icon(
-                                                  Icons.star,
-                                                  color: Colors.white,
-                                                  size: 20,
-                                                ),
-                                              );
-                                            } else {
-                                              return Icon(
-                                                Icons.star,
-                                                color: clBody,
-                                                size: 20,
-                                              );
-                                            }
-                                          },
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(info.provider.rating.toString()),
-                                      ],
-                                    )
+                                    printRating(provider.rating)
                                   ],
                                 ),
                               ],
@@ -319,7 +268,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                Text(info.provider.email),
+                                Text(provider.email,),
                               ],
                             ),
                             const SizedBox(
@@ -334,7 +283,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                                   width: 10,
                                 ),
                                 Text(
-                                  info.provider.location,
+                                  provider.location,
                                 ),
                               ],
                             ),
@@ -350,7 +299,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                                   width: 10,
                                 ),
                                 Text(
-                                  info.provider.phone,
+                                  provider.phone,
                                 ),
                               ],
                             ),
