@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:home_mate/screens/booking_status.dart';
-import 'package:home_mate/screens/category.dart';
+import 'package:home_mate/screens/user/booking_status.dart';
+import 'package:home_mate/screens/user/category.dart';
 import 'package:home_mate/screens/chat.dart';
-import 'package:home_mate/screens/home.dart';
-import 'package:home_mate/screens/profile.dart';
+import 'package:home_mate/screens/user/home.dart';
+import 'package:home_mate/screens/user/profile.dart';
 
 class NavBar extends StatefulWidget {
   final int index;
