@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -351,7 +350,7 @@ class _SignUpState extends State<SignUp> {
   Future<String> uploadProfile(File? file) async {
     if (file != null) {
       UploadTask task =
-          storageRef.child("images/profiles/${user!.uid}").putFile(file!);
+          storageRef.child("images/profiles/${user!.uid}").putFile(file);
 
       TaskSnapshot snap = await task;
 
@@ -366,23 +365,25 @@ class _SignUpState extends State<SignUp> {
 
   Future<void> submitUserData(context) async {
     processDialog(context);
-    try{
+    try {
       String profileUrl = await uploadProfile(profileImage);
       await user!.updateEmail(email.text.trim());
-      await user!.updateDisplayName("${fname.text.trim()} ${lname.text.trim()}");
+      await user!
+          .updateDisplayName("${fname.text.trim()} ${lname.text.trim()}");
       if (profileImage != null) {
         await user!.updatePhotoURL(profileUrl);
       }
       if (opt1) {
         normalUser = UserModel(
-            id: user!.uid,
-            fName: fname.text.trim(),
-            lName: lname.text.trim(),
-            email: email.text.trim(),
-            location: "Sector 26, Gandhinagar, Gujarat",
-            profileUrl: profileUrl,
-            phone: user!.phoneNumber!,
-            joined: DateTime.now());
+          id: user!.uid,
+          fName: fname.text.trim(),
+          lName: lname.text.trim(),
+          email: email.text.trim(),
+          location: "Sector 26, Gandhinagar, Gujarat",
+          profileUrl: profileUrl,
+          phone: user!.phoneNumber!,
+          joined: DateTime.now(),
+        );
         await FirebaseFirestore.instance
             .collection("users")
             .doc(user!.uid)
@@ -392,9 +393,9 @@ class _SignUpState extends State<SignUp> {
             context,
             MaterialPageRoute(
                 builder: (context) => const NavBar(
-                  index: 0,
-                )),
-                (route) => false);
+                      index: 0,
+                    )),
+            (route) => false);
       } else if (opt2) {
         providerUser = ProviderModel(
           id: user!.uid,
@@ -405,22 +406,26 @@ class _SignUpState extends State<SignUp> {
           profileUrl: profileUrl,
           phone: user!.phoneNumber!,
           joined: DateTime.now(),
-          ratedBy: 0,
           rating: 0.0,
           tagline: "",
           description: "",
+
         );
         await FirebaseFirestore.instance
             .collection("users")
             .doc(user!.uid)
             .set(providerUser.toMap());
         Navigator.pop(context);
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>const ProviderSignUp()));
-      }} on FirebaseException catch (e){
-        log(e.message!);
-        snackMessage(context, e.message!);
-        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ProviderSignUp(),
+          ),
+        );
+      }
+    } on FirebaseException catch (e) {
+      snackMessage(context, e.message!);
+      Navigator.pop(context);
     }
-
   }
 }

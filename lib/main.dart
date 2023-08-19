@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/firebase_options.dart';
-import 'package:home_mate/screens/provider/provider_sign_up.dart';
 
 import 'package:home_mate/screens/splashscreen.dart';
 

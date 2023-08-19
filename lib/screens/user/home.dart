@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
+import 'package:home_mate/model/category_model.dart';
+import 'package:home_mate/model/service_model.dart';
 import 'package:home_mate/screens/search.dart';
 import 'package:home_mate/widgets/bottom_nav.dart';
 import 'package:home_mate/widgets/category_card.dart';
@@ -16,6 +19,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int imgIndex = 0;
   late PageController imgSliderController;
+  TextEditingController searchText = TextEditingController();
   List<String> sliderImages = [
     "assets/images/servicecover1.png",
     "assets/images/servicecover2.png",
@@ -23,10 +27,15 @@ class _HomeState extends State<Home> {
     "assets/images/servicecover4.png",
   ];
 
+
+
+
   @override
   void initState() {
     super.initState();
     imgSliderController = PageController();
+
+
   }
 
   @override
@@ -45,10 +54,9 @@ class _HomeState extends State<Home> {
       body: SafeArea(
         child: ListView(
           children: [
-            // Text(screenwidth.toString()),
             topSearchSlider(screenwidth, screenheight),
-            homeCategories(screenwidth, screenheight),
-            homeServices(screenwidth, screenheight),
+            homeCategories(),
+            homeServices(),
             const SizedBox(
               height: 60,
             ),
@@ -58,12 +66,11 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Container homeServices(double screenwidth, double screenheight) {
+  Container homeServices() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       margin: const EdgeInsets.only(top: 20),
       color: clContainer,
-      // width: screenwidth * 0.,
       child: Column(
         children: [
           Row(
@@ -78,7 +85,9 @@ class _HomeState extends State<Home> {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchService(),),);
+                },
                 child: Text(
                   "View All",
                   style: TextStyle(
@@ -89,25 +98,37 @@ class _HomeState extends State<Home> {
               ),
             ],
           ),
-          SizedBox(
-            height: screenheight * 0.42,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: userServices.length,
-              itemBuilder: (context, index) {
-                return ServiceCard(
-                  info: userServices[index],
-                  width: screenwidth * 0.8,
-                );
-              }
-            ),
-          ),
+          StreamBuilder(
+              stream: FirebaseFirestore.instance.collection("services").where("isFeatured",isEqualTo: true).snapshots(),
+              builder: (context,snapshot){
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return const Center(child: CircularProgressIndicator(),);
+                }
+                if(snapshot.hasData && snapshot.data != null){
+                  List<ServiceModel> featuredServices = snapshot.data!.docs.map((e) => ServiceModel.fromMap(e.data())).toList();
+
+                  if(featuredServices.isNotEmpty){
+                    return SizedBox(
+                      height: 320,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: featuredServices.length,
+                          itemBuilder: (context, index) {
+                            return ServiceCard(service: featuredServices[index],width: 250,);
+                          }),
+                    );
+
+                  }
+                  return const Center(child: Text("No Featured Services Found"),);
+                }
+                return const Center(child: Text("Something went wrong"),);
+          }),
         ],
       ),
     );
   }
 
-  Container homeCategories(double screenwidth, double screenheight) {
+  Container homeCategories() {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -115,6 +136,7 @@ class _HomeState extends State<Home> {
       margin: const EdgeInsets.only(top: 60),
       // width: screenwidth * 0.9,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,20 +176,34 @@ class _HomeState extends State<Home> {
           const SizedBox(
             height: 10,
           ),
-          Wrap(
-            alignment: WrapAlignment.start,
-            spacing: 10,
-            runSpacing: 15,
-            children: [
-              for (int i = 0; i < userCategories.length; i++)
-                CategoryCard(
-                  category: userCategories[i],
-                  height: screenheight * 0.17,
-                  width: screenwidth * 0.25,
-                  font: 12,
-                ),
-            ],
-          ),
+          StreamBuilder(
+              stream: FirebaseFirestore.instance.collection("categories").where("isFeatured",isEqualTo: true).snapshots(),
+              builder: (context,snapshot){
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return const Center(child: CircularProgressIndicator(),);
+                }
+                if(snapshot.hasData){
+
+                  List<CategoryModel> featuredCategories = snapshot.data!.docs.map((e) => CategoryModel.fromMap(e.data())).toList();
+
+                  if(featuredCategories.isNotEmpty){
+                    return Wrap(
+                      alignment: WrapAlignment.start,
+                      spacing: 10,
+                      runSpacing: 15,
+                      children: [
+
+                        for (int i = 0; i < featuredCategories.length; i++)
+                          SizedBox(
+                              height: 120,
+                              child: CategoryCard(category: featuredCategories[i],)),
+                      ],
+                    );
+                  }
+                  return const Center(child: Text("No Featured Categories Found"),);
+                }
+                return const Center(child: Text("Something went wrong"),);
+          }),
         ],
       ),
     );
@@ -245,32 +281,39 @@ class _HomeState extends State<Home> {
           left: (screenwidth - (screenwidth * 0.9)) / 2,
           child: SizedBox(
             width: screenwidth * 0.9,
-            child: GestureDetector(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>const SearchService(),),);
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: screenwidth * 0.7,
-                    height: 60,
-                    padding: const EdgeInsets.only(left: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                    ),
-                    child: const TextField(
-                      enabled: false,
-                      decoration: InputDecoration(
-                        hintText: "Search Services",
-                        border: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                      ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: screenwidth * 0.7,
+                  height: 60,
+                  padding: const EdgeInsets.only(left: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  child: TextField(
+                    // enabled: false,
+                    controller: searchText,
+
+                    decoration: const InputDecoration(
+                      hintText: "Search Services",
+                      border: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
                     ),
                   ),
-                  ClipRRect(
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SearchService(query: searchText.text.trim(),),
+                      ),
+                    );
+                  },
+                  child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
                       height: 60,
@@ -282,8 +325,8 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -291,3 +334,7 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
+
+

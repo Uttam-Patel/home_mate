@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
-import 'package:home_mate/model/category_model.dart';
 import 'package:home_mate/widgets/category_card.dart';
 
 class Categories extends StatefulWidget {
@@ -14,8 +13,8 @@ class Categories extends StatefulWidget {
 class _CategoriesState extends State<Categories> {
   @override
   Widget build(BuildContext context) {
-    double screenwidth = MediaQuery.of(context).size.width * 1;
-    double screenheight = MediaQuery.of(context).size.height * 1;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: clBG,
       appBar: AppBar(
@@ -27,21 +26,18 @@ class _CategoriesState extends State<Categories> {
         backgroundColor: clPrimary,
       ),
       body: GridView.builder(
-        padding:
-            const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 80),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: screenwidth * 0.1,
-          mainAxisSpacing: screenheight * 0.03,
-        ),
-        itemCount: userCategories.length,
-        itemBuilder: (context, index) => CategoryCard(
-          category: userCategories[index],
-          height: screenheight * 0.18,
-          width: screenwidth * 0.4,
-          font: 14,
-        ),
-      ),
+          semanticChildCount: userCategories.length,
+          itemCount: userCategories.length,
+          padding: EdgeInsets.only(top: 30, bottom: 70,left: screenWidth * 0.1,right: screenWidth * 0.1),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 100/100,
+            crossAxisSpacing: screenWidth * 0.1,
+              mainAxisSpacing: screenWidth * 0.1
+          ),
+          itemBuilder: (context, index) {
+            return CategoryCard(category: userCategories[index]);
+          }),
     );
   }
 }

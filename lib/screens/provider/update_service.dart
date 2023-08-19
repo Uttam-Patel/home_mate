@@ -8,25 +8,28 @@ import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/model/category_model.dart';
 import 'package:home_mate/model/service_model.dart';
-import 'package:home_mate/model/user_model.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
-class AddService extends StatefulWidget {
-  const AddService({Key? key}) : super(key: key);
+class UpdateService extends StatefulWidget {
+  const UpdateService({Key? key, required this.service}) : super(key: key);
+  final ServiceModel service;
 
   @override
-  State<AddService> createState() => _AddServiceState();
+  State<UpdateService> createState() => _UpdateService();
 }
 
-class _AddServiceState extends State<AddService> {
+class _UpdateService extends State<UpdateService> {
+  late ServiceModel service;
+  late String uniqueId;
   File? coverImage;
   String? categoryValue;
   String? subCategoryValue;
   late List<CategoryModel> category;
   List subCategory = [];
   late FirebaseAuth auth;
+  late String photo;
   User? user;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController name = TextEditingController();
@@ -39,6 +42,14 @@ class _AddServiceState extends State<AddService> {
     category = userCategories;
     auth = FirebaseAuth.instance;
     user = auth.currentUser;
+    service = widget.service;
+    categoryValue = service.category;
+    subCategoryValue = service.subCategory;
+    name.text = service.name;
+    description.text = service.description;
+    price.text = service.price.toString();
+    photo = service.coverUrl ?? "";
+    uniqueId = service.id;
   }
 
   @override
@@ -49,7 +60,7 @@ class _AddServiceState extends State<AddService> {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: clPrimary,
         title: const Text(
-          "New Service",
+          "Update Service",
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -62,25 +73,26 @@ class _AddServiceState extends State<AddService> {
           SizedBox(
             height: 165,
             child: InkWell(
-              onTap: () {
-                selectImage(context);
-              },
-              child: (coverImage == null)
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.add_box_outlined,
-                            size: 50,
-                            color: clPrimary,
-                          ),
-                          const Text("Add Cover Image"),
-                        ],
-                      ),
-                    )
-                  : Image.file(coverImage!),
-            ),
+                onTap: () {
+                  selectImage(context);
+                },
+                child: (coverImage != null)
+                    ? Image.file(coverImage!)
+                    : (photo.isNotEmpty)
+                        ? Image.network(photo)
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.add_box_outlined,
+                                  size: 50,
+                                  color: clPrimary,
+                                ),
+                                const Text("Add Cover Image"),
+                              ],
+                            ),
+                          )),
           ),
           // SizedBox(
           //   height: 200,
@@ -148,6 +160,7 @@ class _AddServiceState extends State<AddService> {
                       DropdownButtonFormField(
                         onChanged: (value) {
                           setState(() {
+                            subCategoryValue = null;
                             categoryValue = value;
                             int i = category
                                 .indexWhere((element) => element.name == value);
@@ -285,7 +298,7 @@ class _AddServiceState extends State<AddService> {
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
                       if (categoryValue != null && subCategoryValue != null) {
-                        await createService(context);
+                        await updateService(context);
                         Navigator.pop(context);
                       } else {
                         Navigator.pop(context);
@@ -350,27 +363,26 @@ class _AddServiceState extends State<AddService> {
     }
   }
 
-  Future<void> createService(BuildContext context) async {
+  Future<void> updateService(BuildContext context) async {
     processDialog(context);
-    String uniqueId = const Uuid().v1();
     ServiceModel newService = ServiceModel(
-        id: uniqueId,
-        name: name.text.trim(),
-        description: description.text,
-        category: categoryValue!,
-        subCategory: subCategoryValue!,
-        rating: 0.0,
-        isFeatured: false,
-        isSlider: false,
-        coverUrl: await uploadProfile(coverImage, uniqueId),
-        price: double.parse(price.text.trim()),
-        providerId: user!.uid,
+      id: uniqueId,
+      name: name.text.trim(),
+      description: description.text,
+      category: categoryValue!,
+      subCategory: subCategoryValue!,
+      rating: 0.0,
+      isFeatured: false,
+      isSlider: false,
+      coverUrl: await uploadProfile(coverImage, uniqueId),
+      price: double.parse(price.text.trim()),
+      providerId: user!.uid,
     );
     try {
       await FirebaseFirestore.instance
           .collection("services")
           .doc(uniqueId)
-          .set(newService.toMap());
+          .update(newService.toMap());
 
       Navigator.pop(context);
     } on FirebaseException catch (e) {

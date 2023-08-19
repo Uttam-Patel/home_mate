@@ -4,10 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
-import 'package:home_mate/model/user_model.dart';
-import 'package:home_mate/screens/provider/provider_home.dart';
 import 'package:home_mate/widgets/bottom_nav.dart';
 
 class ProviderSignUp extends StatefulWidget {
@@ -107,31 +105,27 @@ class _ProviderSignUp extends State<ProviderSignUp> {
                         height: 200,
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          borderRadius:
-                            BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12),
                           border: Border.all(),
                         ),
                         child: TextFormField(
-                            controller: description,
-                            maxLines: 5,
-
-                            validator: (value) {
-                              if (value == null) {
-                                return "This field can't be null";
-                              } else if (value.length < 10) {
-                                return "Minimum length is 10";
-                              } else {
-                                return null;
-                              }
-                            },
-                            keyboardType: TextInputType.multiline,
-                            decoration: const InputDecoration(
-                                counterText: "",
-                                border:InputBorder.none,
-                                hintText:
-                                    "Job Description",
-
-                            ),
+                          controller: description,
+                          maxLines: 5,
+                          validator: (value) {
+                            if (value == null) {
+                              return "This field can't be null";
+                            } else if (value.length < 10) {
+                              return "Minimum length is 10";
+                            } else {
+                              return null;
+                            }
+                          },
+                          keyboardType: TextInputType.multiline,
+                          decoration: const InputDecoration(
+                            counterText: "",
+                            border: InputBorder.none,
+                            hintText: "Job Description",
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -146,12 +140,21 @@ class _ProviderSignUp extends State<ProviderSignUp> {
                 ElevatedButton(
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
-                      await FirebaseFirestore.instance.collection("users").doc(user!.uid).update({
-                        "tagline":tagline.text.trim(),
-                        "description":description.text,
+                      processDialog(context);
+                      await FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(user!.uid)
+                          .update({
+                        "tagline": tagline.text.trim(),
+                        "description": description.text,
                       });
+
                       // ignore: use_build_context_synchronously
-                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>const NavBar(index: 0)), (route) => false);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const NavBar(index: 0)),
+                          (route) => false);
                     }
                   },
                   style: ElevatedButton.styleFrom(

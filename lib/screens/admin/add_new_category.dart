@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,33 +37,35 @@ class _AddCategory extends State<AddCategory> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: ListView(
-        children: [
-          const SizedBox(height: 20,),
-
-          SizedBox(
-            height: 100,
-            width: 100,
-            child: InkWell(
-              onTap: () {
-                selectImage(context);
-              },
-              child: (coverImage == null)? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.add_box_outlined,
-                      size: 50,
-                      color: clPrimary,
+      body: ListView(children: [
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          height: 100,
+          width: 100,
+          child: InkWell(
+            onTap: () {
+              selectImage(context);
+            },
+            child: (coverImage == null)
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.add_box_outlined,
+                          size: 50,
+                          color: clPrimary,
+                        ),
+                        const Text("Add Cover Image"),
+                      ],
                     ),
-                    const Text("Add Cover Image"),
-                  ],
-                ),
-              ):Image.file(coverImage!),
-            ),
+                  )
+                : Image.file(coverImage!),
           ),
-          Container(
+        ),
+        Container(
           decoration: BoxDecoration(
             color: clBG,
             borderRadius: BorderRadius.circular(30),
@@ -195,10 +196,10 @@ class _AddCategory extends State<AddCategory> {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  if(category.text.trim().length >= 4 && subCategories.isNotEmpty){
+                  if (category.text.trim().length >= 4 &&
+                      subCategories.isNotEmpty) {
                     await createCategory(context);
                     Navigator.pop(context);
-
                   } else {
                     snackMessage(context, "Please recheck entered details");
                   }
@@ -216,34 +217,41 @@ class _AddCategory extends State<AddCategory> {
             ],
           ),
         ),
-    ]
-      ),
+      ]),
     );
   }
-  Future<void> createCategory(BuildContext context) async{
+
+  Future<void> createCategory(BuildContext context) async {
     processDialog(context);
     String uniqueId = const Uuid().v1();
-    CategoryModel newCategory = CategoryModel(id: uniqueId, name: category.text.trim(), subCategories: subCategories,coverUrl: await uploadProfile(coverImage, uniqueId));
-    try{
-      await FirebaseFirestore.instance.collection("categories").doc(uniqueId).set(newCategory.toMap());
+    CategoryModel newCategory = CategoryModel(
+      id: uniqueId,
+      name: category.text.trim(),
+      subCategories: subCategories,
+      coverUrl: await uploadProfile(coverImage, uniqueId),
+      isFeatured: false,
+    );
+    try {
+      await FirebaseFirestore.instance
+          .collection("categories")
+          .doc(uniqueId)
+          .set(newCategory.toMap());
 
       Navigator.pop(context);
-    } on FirebaseException catch(e){
+    } on FirebaseException catch (e) {
       Navigator.pop(context);
       snackMessage(context, e.code);
-      log(e.code);
-
     }
   }
 
   void selectImage(context) async {
     XFile? selectedFile;
-    selectedFile = await ImagePicker()
-        .pickImage(source: ImageSource.gallery);
+    selectedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (selectedFile != null) {
       cropImage(selectedFile);
     }
   }
+
   void cropImage(XFile img) async {
     CroppedFile? croppedImage = await ImageCropper().cropImage(
       sourcePath: img.path,
@@ -259,17 +267,17 @@ class _AddCategory extends State<AddCategory> {
     }
   }
 
-  Future<String> uploadProfile(File? file,String categoryId) async {
-    if(file != null){
+  Future<String> uploadProfile(File? file, String categoryId) async {
+    if (file != null) {
       UploadTask task =
-      storageRef.child("images/categories/$categoryId").putFile(file);
+          storageRef.child("images/categories/$categoryId").putFile(file);
 
       TaskSnapshot snap = await task;
 
       Future<String> downloadUrl = snap.ref.getDownloadURL();
 
       return downloadUrl;
-    }else{
+    } else {
       return Future(() => "");
     }
   }

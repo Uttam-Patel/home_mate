@@ -7,6 +7,7 @@ import 'package:home_mate/screens/settings/change_contact.dart';
 import 'package:home_mate/screens/settings/editprofile.dart';
 import 'package:home_mate/screens/login.dart';
 import 'package:home_mate/screens/settings/help_and_support.dart';
+import 'package:home_mate/screens/settings/payment_method.dart';
 import 'package:home_mate/screens/settings/privacy_policy.dart';
 import 'package:home_mate/screens/settings/terms_and_conditions.dart';
 import 'package:home_mate/screens/settings/verify_email.dart';
@@ -174,6 +175,21 @@ class _ProfileState extends State<Profile> {
                       ),
                       title: const Text(
                         "Verify Email",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const PaymentMethod()));
+
+                      },
+                      leading: const Icon(
+                        Icons.payment,
+                        size: 20,
+                      ),
+                      title: const Text(
+                        "Payment Method",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       trailing: const Icon(Icons.keyboard_arrow_right),

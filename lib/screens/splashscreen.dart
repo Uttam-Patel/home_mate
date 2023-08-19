@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
+import 'package:home_mate/screens/login.dart';
 import 'package:home_mate/screens/welcome.dart';
 import 'package:home_mate/widgets/bottom_nav.dart';
 
@@ -26,12 +27,13 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(seconds: 2),
     );
     _animationController!.forward();
-    _animationController!.addStatusListener((status) async {
+    _animationController!.addStatusListener((status)  {
       if (status == AnimationStatus.completed) {
         User? user = FirebaseAuth.instance.currentUser;
         if (user != null) {
           if (user.displayName != null && user.displayName != "") {
-            await getUserDetails(user);
+
+            // ignore: use_build_context_synchronously
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
@@ -42,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen>
           } else {
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+                MaterialPageRoute(builder: (context) => const LogIn()),
                 (route) => false);
           }
         } else {

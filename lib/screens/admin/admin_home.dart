@@ -30,170 +30,176 @@ class _AdminHomeState extends State<AdminHome> {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            height: 220,
-            child: GridView(
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 200 / 120,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10),
+            child: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: clBG,
-                    border: Border.all(color: clBody),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  mainAxisAlignment:MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: clBG,
+                        border: Border.all(color: clBody),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "98",
-                            style: TextStyle(
-                                color: clPrimary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "98",
+                                style: TextStyle(
+                                    color: clPrimary,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                              Text(
+                                "Total Booking",
+                                style: TextStyle(color: clBody, fontSize: 10),
+                              ),
+                            ],
                           ),
-                          Text(
-                            "Total Booking",
-                            style: TextStyle(color: clBody, fontSize: 10),
+                          CircleAvatar(
+                            radius: 22,
+                            child: SvgPicture.asset(
+                              "assets/icons/Ticket1.svg",
+                              height: 22,
+                              width: 22,
+                            ),
                           ),
                         ],
                       ),
-                      CircleAvatar(
-                        radius: 22,
-                        child: SvgPicture.asset(
-                          "assets/icons/Ticket1.svg",
-                          height: 22,
-                          width: 22,
-                        ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: clBG,
+                        border: Border.all(color: clBody),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: clBG,
-                    border: Border.all(color: clBody),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "15",
-                            style: TextStyle(
-                                color: clPrimary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "15",
+                                style: TextStyle(
+                                    color: clPrimary,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                              Text(
+                                "Total Service",
+                                style: TextStyle(color: clBody, fontSize: 10),
+                              ),
+                            ],
                           ),
-                          Text(
-                            "Total Service",
-                            style: TextStyle(color: clBody, fontSize: 10),
+                          CircleAvatar(
+                            radius: 22,
+                            child: SvgPicture.asset(
+                              "assets/icons/Ticket1.svg",
+                              height: 22,
+                              width: 22,
+                            ),
                           ),
                         ],
                       ),
-                      CircleAvatar(
-                        radius: 22,
-                        child: SvgPicture.asset(
-                          "assets/icons/Ticket1.svg",
-                          height: 22,
-                          width: 22,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: clBG,
-                    border: Border.all(color: clBody),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(height: 10,),
+                Row(
+                  mainAxisAlignment:MainAxisAlignment.spaceAround,
+
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: clBG,
+                        border: Border.all(color: clBody),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "30",
-                            style: TextStyle(
-                                color: clPrimary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "30",
+                                style: TextStyle(
+                                    color: clPrimary,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                              Text(
+                                "Total Rating",
+                                style: TextStyle(color: clBody, fontSize: 10),
+                              ),
+                            ],
                           ),
-                          Text(
-                            "Total Rating",
-                            style: TextStyle(color: clBody, fontSize: 10),
+                          CircleAvatar(
+                            radius: 22,
+                            child: SvgPicture.asset(
+                              "assets/icons/Ticket1.svg",
+                              height: 22,
+                              width: 22,
+                            ),
                           ),
                         ],
                       ),
-                      CircleAvatar(
-                        radius: 22,
-                        child: SvgPicture.asset(
-                          "assets/icons/Ticket1.svg",
-                          height: 22,
-                          width: 22,
-                        ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: clBG,
+                        border: Border.all(color: clBody),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: clBG,
-                    border: Border.all(color: clBody),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "\$45.3",
-                            style: TextStyle(
-                                color: clPrimary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "\$45.3",
+                                style: TextStyle(
+                                    color: clPrimary,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                              Text(
+                                "Total Earning",
+                                style: TextStyle(color: clBody, fontSize: 10),
+                              ),
+                            ],
                           ),
-                          Text(
-                            "Total Earning",
-                            style: TextStyle(color: clBody, fontSize: 10),
+                          CircleAvatar(
+                            radius: 22,
+                            child: SvgPicture.asset(
+                              "assets/icons/Ticket1.svg",
+                              height: 22,
+                              width: 22,
+                            ),
                           ),
                         ],
                       ),
-                      CircleAvatar(
-                        radius: 22,
-                        child: SvgPicture.asset(
-                          "assets/icons/Ticket1.svg",
-                          height: 22,
-                          width: 22,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
+          const SizedBox(height: 10,),
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context)=>const AddCategory(),),);

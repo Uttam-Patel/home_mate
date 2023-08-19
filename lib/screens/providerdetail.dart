@@ -1,32 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
-import 'package:home_mate/model/provider_model.dart';
 import 'package:home_mate/model/service_model.dart';
+import 'package:home_mate/model/user_model.dart';
 import 'package:home_mate/widgets/services_card.dart';
 
 class ProviderDetails extends StatefulWidget {
-  final ProviderUserModel provider;
-  const ProviderDetails({super.key, required this.provider});
+  final String providerId;
+  const ProviderDetails({super.key, required this.providerId});
 
   @override
   State<ProviderDetails> createState() => _ProviderDetailsState();
 }
 
 class _ProviderDetailsState extends State<ProviderDetails> {
-  late ProviderUserModel info;
   @override
   void initState() {
     super.initState();
-    info = widget.provider;
   }
-
+  late ProviderModel provider;
   @override
   Widget build(BuildContext context) {
     double screenwidth = MediaQuery.of(context).size.width * 1;
     double screenheight = MediaQuery.of(context).size.height * 1;
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: clPrimary,
         title: const Text(
           "Provider Detail",
@@ -35,216 +35,201 @@ class _ProviderDetailsState extends State<ProviderDetails> {
           ),
         ),
       ),
-      body: ListView(
-        children: [
-          Container(
-            color: const Color(0xFFF6F7F9),
-            height: screenheight * 0.2,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      info.profileUrl,
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("users").doc(widget.providerId).snapshots(),
+        builder: (context,snapshot){
+          if(snapshot.connectionState == ConnectionState.waiting){
+            return Center(child: CircularProgressIndicator(),);
+          }
+          Map<String,dynamic> providerMap = snapshot.data!.data() as Map<String,dynamic>;
+          provider = ProviderModel.fromMap(providerMap);
+          return ListView(
+            children: [
+              Container(
+                color: const Color(0xFFF6F7F9),
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: (provider.profileUrl.isNotEmpty)? NetworkImage(
+                        provider.profileUrl,
+                      ):null,
+                      radius: screenwidth * 0.13,
+                      child: (!provider.profileUrl.isNotEmpty)?Icon(Icons.person_outline,size: screenwidth * 0.13,):null,
                     ),
-                    radius: screenwidth * 0.13,
+
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${provider.fName} ${provider.lName}",
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 5,),
+                          Text(provider.tagline),
+                          const SizedBox(height: 5,),
+                          printRating(provider.rating),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(
+                  20,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "About",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      child: Text(
+                        provider.description,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              InkWell(
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: screenwidth * 0.1),
+                  padding: EdgeInsets.symmetric(vertical: screenwidth * 0.05,horizontal: screenwidth * 0.06),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      12,
+                    ),
+                    color: clContainer,
                   ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  // height: MediaQuery.of(context).size.width * 0.6,
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "${info.fName} ${info.lName}",
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
+                      const Text(
+                        "Email",
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
                       ),
-                      Text(info.tagline),
-                      printRating(info.rating),
+                      Text(
+                        provider.email,
+                        style: const TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      const SizedBox(height: 10,),
+                      const Text(
+                        "Number",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        provider.phone,
+                        style: const TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      const SizedBox(height: 10,),
+
+                      const Text(
+                        "Member Since",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        "${provider.joined.day}/${provider.joined.month}/${provider.joined.year}",
+                        style: const TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 20,
-              top: 20,
-              right: 20,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "About",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.85,
-                  child: Text(
-                    info.description,
-                  ),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: screenwidth * 0.1),
-            padding: EdgeInsets.symmetric(horizontal: screenwidth * 0.05),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                10,
+              const SizedBox(
+                height: 30,
               ),
-              color: const Color(0xFFF6F7F9),
-            ),
-            width: MediaQuery.of(context).size.width * 0.85,
-            height: MediaQuery.of(context).size.width * 0.6,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  children: [
-                    const Row(
-                      children: [
-                        Text(
-                          "Email",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          info.email,
-                          style: const TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
                 ),
-                Column(
-                  children: [
-                    const Row(
-                      children: [
-                        Text(
-                          "Number",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          info.phone,
-                          style: const TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    const Row(
-                      children: [
-                        Text(
-                          "Member Since",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          info.joined.toString(),
-                          style: const TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          const Padding(
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
+                child: Text(
                   "Services",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  "View All",
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          homeServices(screenwidth, screenheight)
-        ],
+              ),
+              const SizedBox(height: 20,),
+              homeServices()
+            ],
+          );
+        },
       ),
     );
   }
 
-  Column homeServices(double screenwidth, double screenheight) {
-    List<ServiceModel> providerService = userServices.where((element) => element.provider["id"] == info.id).toList();
-    return Column(
-      children: [
-        for (int i = 0; i < providerService.length; i++)
-          Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            height: screenheight * 0.42,
-            width: screenwidth * 0.9,
-            child: ServiceCard(
-              info: userServices[i],
-              width: screenwidth,
-            ),
-          ),
-      ],
-    );
+  Widget homeServices() {
+      return StreamBuilder(
+          stream: FirebaseFirestore.instance.collection("services").where("providerId",isEqualTo: provider.id).snapshots(),
+          builder: (context,snapshot){
+            if(snapshot.connectionState == ConnectionState.waiting){
+              return Center(child: CircularProgressIndicator(),);
+            }
+            if(snapshot.hasData){
+              List<ServiceModel> providerService = snapshot.data!.docs.map((e) => ServiceModel.fromMap(e.data() as Map<String,dynamic>)).toList();
+              if(providerService.isNotEmpty){
+                return Column(
+                  children: [
+                    for (int i = 0; i < providerService.length; i++)
+                      ServiceCard(
+                        service: providerService[i],
+
+                        width: 320,
+                      ),
+                    const SizedBox(height: 10,),
+                    const Center(child: Text("No More",textAlign: TextAlign.center,style:TextStyle(fontSize: 18),))
+
+                  ],
+                );
+              }
+              return const Center(child: Text("Provider does not have any services available right now",textAlign: TextAlign.center,));
+
+            }
+            return const Center(child: Text("Something Went Wrong",textAlign: TextAlign.center,));
+
+
+          });
+    }
   }
-}
+

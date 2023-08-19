@@ -82,7 +82,7 @@ class _EditProfileState extends State<EditProfile> {
                             ? NetworkImage(profileUrl!)
                                 as ImageProvider<Object>?
                             : null,
-                    child:(profileImage == null && profileUrl == null)
+                    child: (profileImage == null && profileUrl == null)
                         ? const Icon(
                             Icons.person,
                             size: 40,
@@ -137,7 +137,7 @@ class _EditProfileState extends State<EditProfile> {
                         "Last Last",
                         lname,
                         Icons.account_circle_outlined,
-                            (value) {
+                        (value) {
                           if (value == null) {
                             return "This field can't be null";
                           } else if (value.length < 3) {
@@ -152,15 +152,15 @@ class _EditProfileState extends State<EditProfile> {
                         "example@email.com",
                         email,
                         Icons.email_outlined,
-                            (value) {
+                        (value) {
                           if (value == null) {
                             return "This field can't be null";
                           } else if (value.length < 5) {
                             return "Minimum length is 8";
-                          } else if(!value.characters.contains('@') && !value.characters.contains('.')){
+                          } else if (!value.characters.contains('@') &&
+                              !value.characters.contains('.')) {
                             return "Please enter a valid email";
-                          }
-                          else {
+                          } else {
                             return null;
                           }
                         },
@@ -188,17 +188,21 @@ class _EditProfileState extends State<EditProfile> {
                   if (formKey.currentState!.validate()) {
                     processDialog(context);
                     String url = await uploadProfile(profileImage);
-                    if ( "${fname.text.trim()} ${lname.text.trim()}" != fullName) {
-                      await user.updateDisplayName("${fname.text.trim()} ${lname.text.trim()}");
+                    if ("${fname.text.trim()} ${lname.text.trim()}" !=
+                        fullName) {
+                      await user.updateDisplayName(
+                          "${fname.text.trim()} ${lname.text.trim()}");
                     }
                     if (email.text.trim() != emailID) {
                       await user.updateEmail(email.text.trim());
                     }
                     if (profileImage != null) {
-                      await user
-                          .updatePhotoURL(url);
+                      await user.updatePhotoURL(url);
                     }
-                    await FirebaseFirestore.instance.collection("users").doc(user!.uid).update({
+                    await FirebaseFirestore.instance
+                        .collection("users")
+                        .doc(user.uid)
+                        .update({
                       "email": email.text.trim(),
                       "fName": fname.text.trim(),
                       "lName": lname.text.trim(),
@@ -266,8 +270,6 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-
-
   void selectImage(context) async {
     XFile? selectedFile;
     showDialog(
@@ -321,16 +323,16 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<String> uploadProfile(File? file) async {
-    if(file != null){
+    if (file != null) {
       UploadTask task =
-      storageRef.child("images/profiles/${user.uid}").putFile(file);
+          storageRef.child("images/profiles/${user.uid}").putFile(file);
 
       TaskSnapshot snap = await task;
 
       Future<String> downloadUrl = snap.ref.getDownloadURL();
 
       return downloadUrl;
-    }else{
+    } else {
       return Future(() => "");
     }
   }
