@@ -32,7 +32,8 @@ Future<void> getUserDetails(User? user) async {
       await getCategories();
     } else {
       normalUser = UserModel.fromMap(data);
-      paymentMethod = providerUser.paymentMethod ?? "";
+      paymentMethod = normalUser.paymentMethod ?? "";
+      print(paymentMethod);
     }
   }
 }

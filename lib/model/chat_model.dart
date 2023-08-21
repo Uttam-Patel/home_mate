@@ -28,7 +28,7 @@ class ChatRoomModel {
         "lastMsg": lastMsg,
       };
 
-  static Future<ChatRoomModel> createChatroom(String currentUserId,anotherUserId)async {
+  static Future<ChatRoomModel> createChatroom(String currentUserId,String anotherUserId)async {
     String uniqueId = const Uuid().v1();
     ChatRoomModel currentUserChatRoom = ChatRoomModel(chatId: uniqueId, userId: currentUserId, anotherUserId: anotherUserId, lastMsg: "");
     ChatRoomModel anotherUserChatRoom = ChatRoomModel(chatId: uniqueId, userId: anotherUserId, anotherUserId: currentUserId, lastMsg: "");

@@ -235,7 +235,9 @@ class _AddCategory extends State<AddCategory> {
       await FirebaseFirestore.instance
           .collection("categories")
           .doc(uniqueId)
-          .set(newCategory.toMap());
+          .set(
+            newCategory.toMap(),
+          );
 
       Navigator.pop(context);
     } on FirebaseException catch (e) {

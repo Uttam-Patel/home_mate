@@ -239,11 +239,12 @@ class _UpdateCategory extends State<UpdateCategory> {
 
   Future<void> createCategory(BuildContext context) async {
     processDialog(context);
+    String url = await uploadProfile(coverImage, uniqueId);
     CategoryModel newCategory = CategoryModel(
       id: uniqueId,
       name: category.text.trim(),
       subCategories: subCategories,
-      coverUrl: await uploadProfile(coverImage, uniqueId),
+      coverUrl: url,
       isFeatured: false,
     );
     try {
@@ -255,6 +256,7 @@ class _UpdateCategory extends State<UpdateCategory> {
           .doc(uniqueId)
           .update(newCategory.toMap());
       for(ServiceModel e in allServices){
+
         if(e.category == category.text.trim() && subCategories.contains(e.subCategory)){
           print("no change");
           continue;

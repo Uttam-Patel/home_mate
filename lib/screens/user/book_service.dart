@@ -33,6 +33,8 @@ class _BookServiceState extends State<BookService> {
   TextEditingController subLocality = TextEditingController();
   TextEditingController street = TextEditingController();
 
+  DateTime now = DateTime.now();
+
   DateTime selectedDate = (DateTime.now().hour < 17)
       ? DateTime.now()
       : DateTime(DateTime.now().year, DateTime.now().month,
@@ -51,6 +53,8 @@ class _BookServiceState extends State<BookService> {
   double taxAmount = 0;
   double totalAmount = 0;
   User? user;
+
+  List<DropdownMenuItem> timeOpt = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -168,8 +172,42 @@ class _BookServiceState extends State<BookService> {
                               DatePicker(
                                 initialDate,
                                 onDateChange: (date) {
-                                  selectedDate = date;
-                                  setState(() {});
+                                  setState(() {
+                                    selectedDate = date;
+                                    timeOpt.clear();
+                                    now = (selectedDate.day ==
+                                                DateTime.now().day &&
+                                            selectedDate.month ==
+                                                DateTime.now().month)
+                                        ? DateTime(
+                                            selectedDate.year,
+                                            selectedDate.month,
+                                            selectedDate.day,
+                                            DateTime.now().hour,
+                                          )
+                                        : selectedDate;
+                                    for (int i = now.hour; i <= 17; i++) {
+                                      if (i >= 10) {
+                                        timeOpt.add(DropdownMenuItem(
+                                          alignment: Alignment.center,
+                                          value: DateTime(
+                                            selectedDate.year,
+                                            selectedDate.month,
+                                            selectedDate.day,
+                                            i,
+                                          ),
+                                          child: (i == 12)
+                                              ? Text("${i}PM")
+                                              : (i < 12)
+                                                  ? Text("${i}AM")
+                                                  : Text("${i - 12}PM"),
+                                        ));
+                                        continue;
+                                      }
+                                      continue;
+                                    }
+                                  });
+                                  print(timeOpt);
                                 },
                                 initialSelectedDate: selectedDate,
                                 selectionColor: clPrimary,
@@ -179,10 +217,21 @@ class _BookServiceState extends State<BookService> {
                                 height: 10,
                               ),
                               DropdownButtonFormField(
+                                value: (timeOpt.isNotEmpty)
+                                    ? timeOpt[0].value
+                                    : null,
                                 onChanged: (value) {
                                   print(value);
                                   setState(() {
-                                    selectedDate = value as DateTime;
+                                    now = (value.day == DateTime.now().day &&
+                                            value.month == DateTime.now().month)
+                                        ? DateTime(
+                                            value.year,
+                                            value.month,
+                                            value.day,
+                                            DateTime.now().hour,
+                                          )
+                                        : value;
                                   });
                                 },
                                 icon: const Icon(Icons.keyboard_arrow_down),
@@ -200,24 +249,7 @@ class _BookServiceState extends State<BookService> {
                                   ),
                                 ),
                                 dropdownColor: clContainer,
-                                items: [
-                                  for (int i = selectedDate.hour; i <= 17; i++)
-                                    if (i >= 10)
-                                      DropdownMenuItem(
-                                        alignment: Alignment.center,
-                                        value: DateTime(
-                                          selectedDate.year,
-                                          selectedDate.month,
-                                          selectedDate.day,
-                                          i,
-                                        ),
-                                        child: (i < 12)
-                                            ? Text("${i}AM")
-                                            : (i == 12)
-                                                ? Text("${i}PM")
-                                                : Text("${i - 12}PM"),
-                                      )
-                                ],
+                                items: timeOpt.toSet().toList(),
                               ),
                               const SizedBox(
                                 height: 20,
@@ -225,7 +257,7 @@ class _BookServiceState extends State<BookService> {
                               DropdownButtonFormField(
                                 value: paymentMethod.isNotEmpty
                                     ? paymentMethod
-                                    : "cash",
+                                    : null,
                                 onChanged: (value) {
                                   print(value);
                                   setState(() {
@@ -444,7 +476,6 @@ class _BookServiceState extends State<BookService> {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(10),
-                      height: 100,
                       decoration: BoxDecoration(
                           color: clContainer,
                           borderRadius: BorderRadius.circular(12)),
@@ -452,53 +483,55 @@ class _BookServiceState extends State<BookService> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                service.name,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(3.0),
-                                decoration: BoxDecoration(
-                                    color: Colors.white70,
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            quantity++;
-                                          });
-                                        },
-                                        child: const Icon(Icons.arrow_drop_up)),
-                                    const SizedBox(
-                                      width: 3,
-                                    ),
-                                    Text(quantity.toString()),
-                                    const SizedBox(
-                                      width: 3,
-                                    ),
-                                    InkWell(
-                                        onTap: () {
-                                          if (quantity > 1) {
-                                            quantity--;
-                                          }
-                                          setState(() {});
-                                        },
-                                        child:
-                                            const Icon(Icons.arrow_drop_down))
-                                  ],
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  service.name,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
-                              )
-                            ],
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(3.0),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white70,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              quantity++;
+                                            });
+                                          },
+                                          child: const Icon(Icons.arrow_drop_up)),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      Text(quantity.toString()),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      InkWell(
+                                          onTap: () {
+                                            if (quantity > 1) {
+                                              quantity--;
+                                            }
+                                            setState(() {});
+                                          },
+                                          child:
+                                              const Icon(Icons.arrow_drop_down))
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                           Container(
                             height: 80,
@@ -764,7 +797,7 @@ class _BookServiceState extends State<BookService> {
       discount: discount,
       quantity: quantity,
       amount: totalAmount,
-      paymentDate: selectedDate,
+      paymentDate: now,
       paymentMethod: paymentMethod,
       tax: tax,
       userID: user!.uid,

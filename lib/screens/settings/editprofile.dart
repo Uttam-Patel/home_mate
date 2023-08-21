@@ -187,17 +187,24 @@ class _EditProfileState extends State<EditProfile> {
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
                     processDialog(context);
+                    if (email.text.trim() != emailID) {
+                      try{
+                        await user.updateEmail(email.text.trim());
+                      } on FirebaseException catch(e){
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        snackMessage(context, e.message!);
+                      }
+                    }
                     String url = await uploadProfile(profileImage);
                     if ("${fname.text.trim()} ${lname.text.trim()}" !=
                         fullName) {
                       await user.updateDisplayName(
                           "${fname.text.trim()} ${lname.text.trim()}");
                     }
-                    if (email.text.trim() != emailID) {
-                      await user.updateEmail(email.text.trim());
-                    }
+
                     if (profileImage != null) {
-                      await user.updatePhotoURL(url);
+                      await user.updatePhotoURL(url.isNotEmpty?url:profileUrl);
                     }
                     await FirebaseFirestore.instance
                         .collection("users")
@@ -206,14 +213,12 @@ class _EditProfileState extends State<EditProfile> {
                       "email": email.text.trim(),
                       "fName": fname.text.trim(),
                       "lName": lname.text.trim(),
-                      "profileUrl": url,
+                      "profileUrl": url.isNotEmpty?url:profileUrl,
                     });
                     // ignore: use_build_context_synchronously
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Profile()),
-                        (route) => false);
+                    Navigator.pop(context);
+                    // ignore: use_build_context_synchronously
+                    Navigator.pop(context);
                   }
                 },
                 child: const Text(

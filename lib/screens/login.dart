@@ -54,7 +54,7 @@ class _LogInState extends State<LogIn> {
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
                 const Text(
-                  "Here is our tagline",
+                  "Your Home, Our Expertise",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 15),
                 ),

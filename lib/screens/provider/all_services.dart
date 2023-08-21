@@ -4,6 +4,7 @@ import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/model/service_model.dart';
 import 'package:home_mate/screens/provider/update_service.dart';
+import 'package:home_mate/screens/servicedetail.dart';
 
 class AllProviderServices extends StatefulWidget {
   const AllProviderServices({Key? key}) : super(key: key);
@@ -38,7 +39,13 @@ class _AllProviderServicesState extends State<AllProviderServices> {
                       itemBuilder: (context,index)=>
 
                           ListTile(
-                            onTap: (){},
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>ServiceDetail(info: serviceList[index])));
+                            },
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: (serviceList[index].coverUrl.isNotEmpty)?Image.network(serviceList[index].coverUrl):const Icon(Icons.home_repair_service),
+                            ),
                             title: Text(serviceList[index].name),
                             subtitle: Text(serviceList[index].category),
                             trailing: SizedBox(

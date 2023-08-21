@@ -56,6 +56,9 @@ class _AddServiceState extends State<AddService> {
       body: RefreshIndicator(
         onRefresh: ()async{
           await getCategories();
+          setState(() {
+            category = providerCategories;
+          });
         },
         child: ListView(
           children: [
@@ -150,8 +153,11 @@ class _AddServiceState extends State<AddService> {
                           height: 10,
                         ),
                         DropdownButtonFormField(
+                          isExpanded: true,
                           onChanged: (value) {
                             setState(() {
+                              subCategory=[];
+                              subCategoryValue = null;
                               categoryValue = value;
                               int i = category
                                   .indexWhere((element) => element.name == value);
@@ -181,7 +187,7 @@ class _AddServiceState extends State<AddService> {
                             category.length,
                             (index) => DropdownMenuItem(
                               value: category[index].name,
-                              child: Text(category[index].name),
+                              child: Text(category[index].name,overflow: TextOverflow.ellipsis,),
                             ),
                           ),
                         ),
@@ -189,6 +195,7 @@ class _AddServiceState extends State<AddService> {
                           height: 10,
                         ),
                         DropdownButtonFormField(
+                          isExpanded:true,
                           onChanged: (value) {
                             setState(() {
                               subCategoryValue = value;
@@ -198,7 +205,7 @@ class _AddServiceState extends State<AddService> {
                           icon: const Icon(Icons.keyboard_arrow_down),
                           validator: (value) {
                             if (value == null) {
-                              return "Please Select a Category";
+                              return "Please Select a SubCategory";
                             } else {
                               return null;
                             }
@@ -217,6 +224,7 @@ class _AddServiceState extends State<AddService> {
                               value: subCategory[index],
                               child: Text(
                                 subCategory[index],
+                                style: const TextStyle(overflow: TextOverflow.ellipsis),
                               ),
                             ),
                           ),
@@ -229,10 +237,6 @@ class _AddServiceState extends State<AddService> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "This field can't be null";
-                            } else if (value.length < 2 ||
-                                value.length > 4 ||
-                                value.trim().characters.contains(" ")) {
-                              return "Enter valid amount";
                             } else {
                               return null;
                             }
@@ -358,6 +362,7 @@ class _AddServiceState extends State<AddService> {
   Future<void> createService(BuildContext context) async {
     processDialog(context);
     String uniqueId = const Uuid().v1();
+    String url = await uploadProfile(coverImage, uniqueId);
     ServiceModel newService = ServiceModel(
         id: uniqueId,
         name: name.text.trim(),
@@ -367,7 +372,7 @@ class _AddServiceState extends State<AddService> {
         rating: 0.0,
         isFeatured: false,
         isSlider: false,
-        coverUrl: await uploadProfile(coverImage, uniqueId),
+        coverUrl: url,
         price: double.parse(price.text.trim()),
         providerId: user!.uid,
     );

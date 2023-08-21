@@ -96,7 +96,7 @@ class _ChatSearchState extends State<ChatSearch> {
                         .map((e) => ProviderModel.fromMap(e.data()))
                         .toList();
                     if (type == "provider"){
-                      userList.remove(providerUser);
+                      userList.removeWhere((element) => element.id == providerUser.id);
                     }
                     if (userList.isNotEmpty) {
                       return usersList(userList);

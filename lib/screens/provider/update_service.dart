@@ -67,6 +67,9 @@ class _UpdateService extends State<UpdateService> {
       body: RefreshIndicator(
         onRefresh: ()async{
           await getCategories();
+          setState(() {
+
+          });
         },
         child: ListView(
           children: [
@@ -162,8 +165,10 @@ class _UpdateService extends State<UpdateService> {
                           height: 10,
                         ),
                         DropdownButtonFormField(
+                          isExpanded:true,
                           onChanged: (value) {
                             setState(() {
+                              subCategory = [];
                               subCategoryValue = null;
                               categoryValue = value;
                               int i = category
@@ -194,7 +199,7 @@ class _UpdateService extends State<UpdateService> {
                             category.length,
                             (index) => DropdownMenuItem(
                               value: category[index].name,
-                              child: Text(category[index].name),
+                              child: Text(category[index].name,overflow: TextOverflow.ellipsis,),
                             ),
                           ),
                         ),
@@ -202,6 +207,7 @@ class _UpdateService extends State<UpdateService> {
                           height: 10,
                         ),
                         DropdownButtonFormField(
+                          isExpanded:true,
                           onChanged: (value) {
                             setState(() {
                               subCategoryValue = value;
@@ -230,6 +236,7 @@ class _UpdateService extends State<UpdateService> {
                               value: subCategory[index],
                               child: Text(
                                 subCategory[index],
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ),
@@ -370,6 +377,7 @@ class _UpdateService extends State<UpdateService> {
 
   Future<void> updateService(BuildContext context) async {
     processDialog(context);
+    String url = await uploadProfile(coverImage, uniqueId);
     ServiceModel newService = ServiceModel(
       id: uniqueId,
       name: name.text.trim(),
@@ -379,7 +387,7 @@ class _UpdateService extends State<UpdateService> {
       rating: 0.0,
       isFeatured: false,
       isSlider: false,
-      coverUrl: await uploadProfile(coverImage, uniqueId),
+      coverUrl: url.isNotEmpty?url:photo,
       price: double.parse(price.text.trim()),
       providerId: user!.uid,
     );
