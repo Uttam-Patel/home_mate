@@ -13,6 +13,8 @@ class CategoryModel {
     required this.isFeatured,
   });
 
+
+
   factory CategoryModel.fromMap(Map<String, dynamic> map) {
     return CategoryModel(
         id: map['id'],
@@ -32,4 +34,5 @@ class CategoryModel {
       "isFeatured":isFeatured,
     };
   }
+
 }

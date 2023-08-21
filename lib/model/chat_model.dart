@@ -45,4 +45,15 @@ class ChatRoomModel {
       "lastMsg":lastMessage,
     });
   }
+
+  static Future<void> deleteChatRoom(ChatRoomModel chatroom)async{
+    if(chatroom.userId != chatroom.anotherUserId){
+      await FirebaseFirestore.instance.collection("users").doc(chatroom.userId).collection("chatRooms").doc(chatroom.chatId).delete();
+      await FirebaseFirestore.instance.collection("users").doc(chatroom.anotherUserId).collection("chatRooms").doc(chatroom.chatId).delete();
+    }else{
+      await FirebaseFirestore.instance.collection("users").doc(chatroom.userId).collection("chatRooms").doc(chatroom.chatId).delete();
+
+    }
+
+  }
 }

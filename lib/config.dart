@@ -8,12 +8,12 @@ import 'package:home_mate/model/user_model.dart';
 
 //User Details
 String type = "";
-List<CategoryModel> userCategories = [];
-List<ServiceModel> userServices = [];
 late UserModel normalUser;
 late AdminModel adminUser;
 late ProviderModel providerUser;
-List<ServiceModel>? userBookmarkedServices;
+late List<CategoryModel> providerCategories;
+late List<ServiceModel> bookmarks;
+String paymentMethod = "";
 
 //Get User Details
 
@@ -23,47 +23,49 @@ Future<void> getUserDetails(User? user) async {
   if (snap.exists) {
     Map<String, dynamic> data = snap.data() as Map<String, dynamic>;
     type = data["type"];
+    await getBookmarks(user);
     if (type == "admin") {
       adminUser = AdminModel.fromMap(data);
-      await getUserCategories();
     } else if (type == "provider") {
       providerUser = ProviderModel.fromMap(data);
-      await getUserCategories();
+      paymentMethod = providerUser.paymentMethod ?? "";
+      await getCategories();
     } else {
       normalUser = UserModel.fromMap(data);
-      await getUserCategories();
+      paymentMethod = providerUser.paymentMethod ?? "";
     }
   }
 }
 
-Future<void> getUserCategories() async {
-  QuerySnapshot snap =
-      await FirebaseFirestore.instance.collection("categories").get();
-  if (snap.size > 0) {
-    userCategories = List.generate(
-        snap.size,
-        (index) => CategoryModel.fromMap(
-            snap.docs[index].data() as Map<String, dynamic>));
-  }
+//Categories for providers
+
+
+
+Future<void> getCategories() async {
+  QuerySnapshot snapshot = await FirebaseFirestore.instance.collection("categories").get();
+  providerCategories= snapshot.docs.map((e) => CategoryModel.fromMap(e.data() as Map<String,dynamic>)).toList();
 }
 
-Future<void> getUserServices() async {
-  if (type == "user") {
-    QuerySnapshot snap =
-        await FirebaseFirestore.instance.collection("services").get();
-    if (snap.size > 0) {
-      userServices = List.generate(
-        snap.size,
-        (index) => ServiceModel.fromMap(
-            snap.docs[index].data() as Map<String, dynamic>),
-      );
-      List<String> serviceCategoris = userServices.map((e) => e.category).toList();
-      userCategories = userCategories.where((element) => serviceCategoris.contains(element.name)).toList();
-    }
-  }
+// Liked Services by user
+
+Future<void> getBookmarks(User? user) async {
+  QuerySnapshot snapshot = await FirebaseFirestore.instance.collection("users").doc(user!.uid).collection("bookmarks").get();
+  bookmarks = snapshot.docs.map((e) => ServiceModel.fromMap(e.data() as Map<String,dynamic>)).toList();
 }
 
-//Find from database
+Future<void> updateBookmarks(ServiceModel service,User? user)async{
+
+
+  if(bookmarks.where((element) => element.id == service.id).isEmpty){
+    await FirebaseFirestore.instance.collection("users").doc(user!.uid).collection("bookmarks").doc(service.id).set(service.toMap());
+    bookmarks.add(service);
+  }else{
+    await FirebaseFirestore.instance.collection("users").doc(user!.uid).collection("bookmarks").doc(service.id).delete();
+    bookmarks.removeWhere((element) => element.id == service.id);
+  }
+
+
+}
 
 //Most Used Shortcuts
 Row printRating(double rating) {

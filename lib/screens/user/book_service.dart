@@ -1,11 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:home_mate/model/payment_model.dart';
 import 'package:home_mate/model/service_model.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class BookService extends StatefulWidget {
   final ServiceModel service;
@@ -42,20 +46,27 @@ class _BookServiceState extends State<BookService> {
   int quantity = 1;
   double discount = 5;
   double tax = 18;
-
+  double subTotal = 0;
+  double discountAmount = 0;
+  double taxAmount = 0;
+  double totalAmount = 0;
+  User? user;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     service = widget.service;
+    user = FirebaseAuth.instance.currentUser;
   }
 
   @override
   Widget build(BuildContext context) {
-    double subTotal = service.price * quantity;
-    double discountAmount = subTotal * discount/100;
-    double taxAmount = subTotal * tax/100;
-    double totalAmount = subTotal + taxAmount - discountAmount;
+    subTotal = double.parse((service.price * quantity).toStringAsFixed(2));
+    discountAmount =
+        double.parse((subTotal * discount / 100).toStringAsFixed(2));
+    taxAmount = double.parse((subTotal * tax / 100).toStringAsFixed(2));
+    totalAmount = double.parse(
+        (subTotal + taxAmount - discountAmount).toStringAsFixed(2));
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
@@ -170,7 +181,9 @@ class _BookServiceState extends State<BookService> {
                               DropdownButtonFormField(
                                 onChanged: (value) {
                                   print(value);
-                                  setState(() {});
+                                  setState(() {
+                                    selectedDate = value as DateTime;
+                                  });
                                 },
                                 icon: const Icon(Icons.keyboard_arrow_down),
                                 validator: (value) {
@@ -198,10 +211,51 @@ class _BookServiceState extends State<BookService> {
                                           selectedDate.day,
                                           i,
                                         ),
-                                        child: (i <= 12)
+                                        child: (i < 12)
                                             ? Text("${i}AM")
-                                            : Text("${i - 12}PM"),
+                                            : (i == 12)
+                                                ? Text("${i}PM")
+                                                : Text("${i - 12}PM"),
                                       )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              DropdownButtonFormField(
+                                value: paymentMethod.isNotEmpty
+                                    ? paymentMethod
+                                    : "cash",
+                                onChanged: (value) {
+                                  print(value);
+                                  setState(() {
+                                    paymentMethod = value ?? "cash";
+                                  });
+                                },
+                                icon: const Icon(Icons.keyboard_arrow_down),
+                                validator: (value) {
+                                  if (value == null) {
+                                    return "This field can't be null";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                  hintText: "Payment Method",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                dropdownColor: clContainer,
+                                items: [
+                                  const DropdownMenuItem(
+                                    child: Text("cash"),
+                                    value: "cash",
+                                  ),
+                                  const DropdownMenuItem(
+                                    child: Text("online"),
+                                    value: "online",
+                                  ),
                                 ],
                               ),
                               const SizedBox(
@@ -404,7 +458,8 @@ class _BookServiceState extends State<BookService> {
                             children: [
                               Text(
                                 service.name,
-                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(
                                 height: 8,
@@ -418,25 +473,28 @@ class _BookServiceState extends State<BookService> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     InkWell(
-                                        onTap: (){
+                                        onTap: () {
                                           setState(() {
                                             quantity++;
                                           });
                                         },
                                         child: const Icon(Icons.arrow_drop_up)),
-                                    const SizedBox(width: 3,),
+                                    const SizedBox(
+                                      width: 3,
+                                    ),
                                     Text(quantity.toString()),
-                                    const SizedBox(width: 3,),
+                                    const SizedBox(
+                                      width: 3,
+                                    ),
                                     InkWell(
-                                        onTap: (){
-                                          if(quantity > 1){
+                                        onTap: () {
+                                          if (quantity > 1) {
                                             quantity--;
                                           }
-                                          setState(() {
-
-                                          });
+                                          setState(() {});
                                         },
-                                        child: const Icon(Icons.arrow_drop_down))
+                                        child:
+                                            const Icon(Icons.arrow_drop_down))
                                   ],
                                 ),
                               )
@@ -484,35 +542,56 @@ class _BookServiceState extends State<BookService> {
                             contentPadding: const EdgeInsets.all(0),
                             minVerticalPadding: 0,
                             title: const Text("Price"),
-                            trailing: Text("₹${service.price.toString()}",style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                            trailing: Text(
+                              "₹${service.price.toString()}",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
                           ),
                           const Divider(),
                           ListTile(
                             contentPadding: const EdgeInsets.all(0),
                             minVerticalPadding: 0,
                             title: const Text("Sub Total"),
-                            trailing: Text("₹${subTotal.toString()}",style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                            trailing: Text(
+                              "₹${subTotal.toString()}",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
                           ),
                           const Divider(),
                           ListTile(
                             contentPadding: const EdgeInsets.all(0),
                             minVerticalPadding: 0,
-                            title: Text("Discount (${discount.toString()}% off)"),
-                            trailing: Text("-₹${(discountAmount).toString()}",style: const TextStyle(color: Colors.green,fontSize: 16),),
+                            title:
+                                Text("Discount (${discount.toString()}% off)"),
+                            trailing: Text(
+                              "-₹${(discountAmount).toString()}",
+                              style: const TextStyle(
+                                  color: Colors.green, fontSize: 16),
+                            ),
                           ),
                           const Divider(),
                           ListTile(
                             contentPadding: const EdgeInsets.all(0),
                             minVerticalPadding: 0,
                             title: Text("Tax (${tax.toString()}%)"),
-                            trailing: Text("+₹${(taxAmount).toString()}",style: const TextStyle(color: Colors.red,fontSize: 16),),
+                            trailing: Text(
+                              "+₹${(taxAmount).toString()}",
+                              style: const TextStyle(
+                                  color: Colors.red, fontSize: 16),
+                            ),
                           ),
                           const Divider(),
                           ListTile(
                             contentPadding: const EdgeInsets.all(0),
                             minVerticalPadding: 0,
                             title: const Text("Total Amount"),
-                            trailing: Text("₹${(totalAmount).toString()}",style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                            trailing: Text(
+                              "₹${(totalAmount).toString()}",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
                           ),
                           const SizedBox(
                             height: 5,
@@ -550,30 +629,34 @@ class _BookServiceState extends State<BookService> {
                           ),
                         ),
                         InkWell(
-                          onTap: () {
-                            Razorpay razorpay = Razorpay();
-                            var options = {
-                              'key': 'rzp_live_ILgsfZCZoFIKMb',
-                              'amount': totalAmount * 100,
-                              'name': service.name,
-                              'description': service.name,
-                              'retry': {'enabled': true, 'max_count': 1},
-                              'send_sms_hash': true,
-                              'prefill': {
-                                'contact': '8888888888',
-                                'email': 'test@razorpay.com'
-                              },
-                              'external': {
-                                'wallets': ['paytm']
-                              }
-                            };
-                            razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
-                                handlePaymentErrorResponse);
-                            razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
-                                handlePaymentSuccessResponse);
-                            razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
-                                handleExternalWalletSelected);
-                            razorpay.open(options);
+                          onTap: () async {
+                            if (paymentMethod == "online") {
+                              Razorpay razorpay = Razorpay();
+                              var options = {
+                                'key': 'rzp_live_ILgsfZCZoFIKMb',
+                                'amount': totalAmount * 100,
+                                'name': service.name,
+                                'description': service.name,
+                                'retry': {'enabled': true, 'max_count': 1},
+                                'send_sms_hash': true,
+                                'prefill': {
+                                  'contact': '8888888888',
+                                  'email': 'test@razorpay.com'
+                                },
+                                'external': {
+                                  'wallets': ['paytm']
+                                }
+                              };
+                              razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
+                                  handlePaymentErrorResponse);
+                              razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
+                                  handlePaymentSuccessResponse);
+                              razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
+                                  handleExternalWalletSelected);
+                              razorpay.open(options);
+                            } else {
+                              await paymentSuccess(totalAmount);
+                            }
                           },
                           child: Container(
                             width: 140,
@@ -603,8 +686,6 @@ class _BookServiceState extends State<BookService> {
     );
   }
 
-
-
   Future<List<Placemark>> determinePosition() async {
     LocationPermission permission;
 
@@ -628,9 +709,10 @@ class _BookServiceState extends State<BookService> {
   }
 
   //Razorpay
-  void handlePaymentErrorResponse(PaymentFailureResponse response) {
-    showAlertDialog(context, "Payment Failed",
-        "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
+  void handlePaymentErrorResponse(PaymentFailureResponse response) async {
+    await paymentSuccess(totalAmount);
+    // showAlertDialog(context, "Payment Failed",
+    //     "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
   }
 
   void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
@@ -670,5 +752,36 @@ class _BookServiceState extends State<BookService> {
         return alert;
       },
     );
+  }
+
+  Future<void> paymentSuccess(double totalAmount) async {
+    processDialog(context);
+    String uniqueId = const Uuid().v1();
+    PaymentReceiptModel payment = PaymentReceiptModel(
+      orderID: uniqueId,
+      orderStatus: "Pending",
+      serviceId: service.id,
+      discount: discount,
+      quantity: quantity,
+      amount: totalAmount,
+      paymentDate: selectedDate,
+      paymentMethod: paymentMethod,
+      tax: tax,
+      userID: user!.uid,
+    );
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .collection("bookings")
+        .doc(uniqueId)
+        .set(payment.toMap());
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(service.providerId)
+        .collection("requests")
+        .doc(uniqueId)
+        .set(payment.toMap());
+    Navigator.pop(context);
+    Navigator.pop(context);
   }
 }

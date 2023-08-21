@@ -5,6 +5,7 @@ import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/model/category_model.dart';
 import 'package:home_mate/model/service_model.dart';
 import 'package:home_mate/screens/search.dart';
+import 'package:home_mate/screens/servicedetail.dart';
 import 'package:home_mate/widgets/bottom_nav.dart';
 import 'package:home_mate/widgets/category_card.dart';
 import 'package:home_mate/widgets/services_card.dart';
@@ -17,31 +18,16 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int imgIndex = 0;
-  late PageController imgSliderController;
   TextEditingController searchText = TextEditingController();
-  List<String> sliderImages = [
-    "assets/images/servicecover1.png",
-    "assets/images/servicecover2.png",
-    "assets/images/servicecover3.png",
-    "assets/images/servicecover4.png",
-  ];
-
-
-
 
   @override
   void initState() {
     super.initState();
-    imgSliderController = PageController();
-
-
   }
 
   @override
   void dispose() {
     super.dispose();
-    imgSliderController.dispose();
   }
 
   @override
@@ -78,7 +64,7 @@ class _HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Services",
+                "Featured Services",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -86,7 +72,12 @@ class _HomeState extends State<Home> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchService(),),);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SearchService(),
+                    ),
+                  );
                 },
                 child: Text(
                   "View All",
@@ -99,30 +90,43 @@ class _HomeState extends State<Home> {
             ],
           ),
           StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("services").where("isFeatured",isEqualTo: true).snapshots(),
-              builder: (context,snapshot){
-                if(snapshot.connectionState == ConnectionState.waiting){
-                  return const Center(child: CircularProgressIndicator(),);
+              stream: FirebaseFirestore.instance
+                  .collection("services")
+                  .where("isFeatured", isEqualTo: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
-                if(snapshot.hasData && snapshot.data != null){
-                  List<ServiceModel> featuredServices = snapshot.data!.docs.map((e) => ServiceModel.fromMap(e.data())).toList();
+                if (snapshot.hasData && snapshot.data != null) {
+                  List<ServiceModel> featuredServices = snapshot.data!.docs
+                      .map((e) => ServiceModel.fromMap(e.data()))
+                      .toList();
 
-                  if(featuredServices.isNotEmpty){
+                  if (featuredServices.isNotEmpty) {
                     return SizedBox(
                       height: 320,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: featuredServices.length,
                           itemBuilder: (context, index) {
-                            return ServiceCard(service: featuredServices[index],width: 250,);
+                            return ServiceCard(
+                              service: featuredServices[index],
+                              width: 250,
+                            );
                           }),
                     );
-
                   }
-                  return const Center(child: Text("No Featured Services Found"),);
+                  return const Center(
+                    child: Text("No Featured Services Found"),
+                  );
                 }
-                return const Center(child: Text("Something went wrong"),);
-          }),
+                return const Center(
+                  child: Text("Something went wrong"),
+                );
+              }),
         ],
       ),
     );
@@ -134,7 +138,6 @@ class _HomeState extends State<Home> {
         horizontal: 20,
       ),
       margin: const EdgeInsets.only(top: 60),
-      // width: screenwidth * 0.9,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -143,7 +146,7 @@ class _HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Category",
+                "Featured Category",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -177,33 +180,44 @@ class _HomeState extends State<Home> {
             height: 10,
           ),
           StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("categories").where("isFeatured",isEqualTo: true).snapshots(),
-              builder: (context,snapshot){
-                if(snapshot.connectionState == ConnectionState.waiting){
-                  return const Center(child: CircularProgressIndicator(),);
+              stream: FirebaseFirestore.instance
+                  .collection("categories")
+                  .where("isFeatured", isEqualTo: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
-                if(snapshot.hasData){
+                if (snapshot.hasData) {
+                  List<CategoryModel> featuredCategories = snapshot.data!.docs
+                      .map((e) => CategoryModel.fromMap(e.data()))
+                      .toList();
 
-                  List<CategoryModel> featuredCategories = snapshot.data!.docs.map((e) => CategoryModel.fromMap(e.data())).toList();
-
-                  if(featuredCategories.isNotEmpty){
+                  if (featuredCategories.isNotEmpty) {
                     return Wrap(
                       alignment: WrapAlignment.start,
                       spacing: 10,
                       runSpacing: 15,
                       children: [
-
                         for (int i = 0; i < featuredCategories.length; i++)
                           SizedBox(
                               height: 120,
-                              child: CategoryCard(category: featuredCategories[i],)),
+                              child: CategoryCard(
+                                category: featuredCategories[i],
+                              )),
                       ],
                     );
                   }
-                  return const Center(child: Text("No Featured Categories Found"),);
+                  return const Center(
+                    child: Text("No Featured Categories Found"),
+                  );
                 }
-                return const Center(child: Text("Something went wrong"),);
-          }),
+                return const Center(
+                  child: Text("Something went wrong"),
+                );
+              }),
         ],
       ),
     );
@@ -216,57 +230,48 @@ class _HomeState extends State<Home> {
         SizedBox(
           height: screenheight * 0.27,
           width: screenwidth,
-          child: PageView.builder(
-            controller: imgSliderController,
-            onPageChanged: (value) {
-              imgIndex = value;
-              setState(() {});
-
-              // Future.delayed(const Duration(seconds: 3), () {
-              //   if (imgIndex == sliderImages.length - 1) {
-              //     imgIndex = 0;
-              //     setState(() {});
-              //   } else {
-              //     imgSliderController.animateToPage(imgIndex + 1,
-              //         duration: const Duration(milliseconds: 350),
-              //         curve: Curves.linear);
-              //   }
-              // });
-            },
-            scrollDirection: Axis.horizontal,
-            itemCount: sliderImages.length,
-            itemBuilder: ((context, index) => Image.asset(
-                  sliderImages[index],
-                  fit: BoxFit.cover,
-                )),
-          ),
-        ),
-        Positioned(
-          top: screenheight * 0.2,
-          left: (screenwidth - (6 * (sliderImages.length) + 20)) / 2,
-          child: Row(
-            children: [
-              ...List.generate(
-                sliderImages.length,
-                (value) => InkWell(
-                  onTap: () {
-                    imgSliderController.animateToPage(value,
-                        duration: const Duration(milliseconds: 350),
-                        curve: Curves.linear);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.all(4),
-                    width: (value == imgIndex) ? 20 : 6,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      color: clBG,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection("services")
+                  .where("isSlider", isEqualTo: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snapshot.hasData) {
+                  List<ServiceModel> sliderServices = snapshot.data!.docs
+                      .map((e) => ServiceModel.fromMap(e.data()))
+                      .toList();
+                  if (sliderServices.isNotEmpty) {
+                    return PageView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: sliderServices.length,
+                      itemBuilder: ((context, index) => InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ServiceDetail(
+                                          info: sliderServices[index])));
+                            },
+                            child: Image.network(
+                              sliderServices[index].coverUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          )),
+                    );
+                  }
+                  return const Center(
+                    child: Text("No Slider Services Found"),
+                  );
+                }
+                return const Center(
+                  child: Text("Something went wrong"),
+                );
+              }),
         ),
         Positioned(
           right: 20,
@@ -295,7 +300,6 @@ class _HomeState extends State<Home> {
                   child: TextField(
                     // enabled: false,
                     controller: searchText,
-
                     decoration: const InputDecoration(
                       hintText: "Search Services",
                       border: InputBorder.none,
@@ -309,7 +313,9 @@ class _HomeState extends State<Home> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SearchService(query: searchText.text.trim(),),
+                        builder: (context) => SearchService(
+                          query: searchText.text.trim(),
+                        ),
                       ),
                     );
                   },
@@ -334,7 +340,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-
-
-

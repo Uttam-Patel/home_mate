@@ -36,7 +36,7 @@ class _AddServiceState extends State<AddService> {
   @override
   void initState() {
     super.initState();
-    category = userCategories;
+    category = providerCategories;
     auth = FirebaseAuth.instance;
     user = auth.currentUser;
   }
@@ -53,261 +53,266 @@ class _AddServiceState extends State<AddService> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: ListView(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
+      body: RefreshIndicator(
+        onRefresh: ()async{
+          await getCategories();
+        },
+        child: ListView(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
 
-          SizedBox(
-            height: 165,
-            child: InkWell(
-              onTap: () {
-                selectImage(context);
-              },
-              child: (coverImage == null)
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.add_box_outlined,
-                            size: 50,
-                            color: clPrimary,
-                          ),
-                          const Text("Add Cover Image"),
-                        ],
-                      ),
-                    )
-                  : Image.file(coverImage!),
-            ),
-          ),
-          // SizedBox(
-          //   height: 200,
-          //   child: InkWell(
-          //     onTap: () {
-          //       selectImage(context);
-          //     },
-          //     child: DottedBorder(
-          //       dashPattern: const [5, 3],
-          //       color: clPrimary,
-          //       padding: const EdgeInsets.all(12),
-          //       borderPadding: const EdgeInsets.all(12),
-          //       child: Center(
-          //         child: Column(
-          //           mainAxisAlignment: MainAxisAlignment.center,
-          //           children: [
-          //             Icon(
-          //               Icons.add_box_outlined,
-          //               size: 50,
-          //               color: clPrimary,
-          //             ),
-          //             const Text("Add Cover Image"),
-          //           ],
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          Container(
-            decoration: BoxDecoration(
-              color: clContainer,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            padding: const EdgeInsets.only(top: 30, left: 12, right: 12),
-            margin: const EdgeInsets.all(12),
-            child: Column(
-              children: [
-                Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: name,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "This field can't be null";
-                          } else if (value.length < 4) {
-                            return "Enter at least 4 characters";
-                          } else {
-                            return null;
-                          }
-                        },
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
-                            counterText: "",
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12))),
-                            hintText: "eg. Car Wash",
-                            labelText: "Service Name"),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      DropdownButtonFormField(
-                        onChanged: (value) {
-                          setState(() {
-                            categoryValue = value;
-                            int i = category
-                                .indexWhere((element) => element.name == value);
-                            subCategory = category[i].subCategories;
-                          });
-                        },
-                        value: categoryValue,
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "This field can't be null";
-                          } else if (value.length < 4) {
-                            return "Enter at least 4 characters";
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                          hintText: "Select Category",
-                          labelText: "Select Category",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        dropdownColor: clContainer,
-                        items: List<DropdownMenuItem>.generate(
-                          category.length,
-                          (index) => DropdownMenuItem(
-                            value: category[index].name,
-                            child: Text(category[index].name),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      DropdownButtonFormField(
-                        onChanged: (value) {
-                          setState(() {
-                            subCategoryValue = value;
-                          });
-                        },
-                        value: subCategoryValue,
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        validator: (value) {
-                          if (value == null) {
-                            return "Please Select a Category";
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                          hintText: "Select Sub Category",
-                          labelText: "Select Sub Category",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        dropdownColor: clContainer,
-                        items: List<DropdownMenuItem>.generate(
-                          subCategory.length,
-                          (index) => DropdownMenuItem(
-                            value: subCategory[index],
-                            child: Text(
-                              subCategory[index],
+            SizedBox(
+              height: 165,
+              child: InkWell(
+                onTap: () {
+                  selectImage(context);
+                },
+                child: (coverImage == null)
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add_box_outlined,
+                              size: 50,
+                              color: clPrimary,
                             ),
-                          ),
+                            const Text("Add Cover Image"),
+                          ],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        controller: price,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "This field can't be null";
-                          } else if (value.length < 2 ||
-                              value.length > 4 ||
-                              value.trim().characters.contains(" ")) {
-                            return "Enter valid amount";
-                          } else {
-                            return null;
-                          }
-                        },
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                            counterText: "",
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12))),
-                            hintText: "eg. 200 (in Rupees)",
-                            labelText: "Price"),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        height: 200,
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(),
-                        ),
-                        child: TextFormField(
-                          controller: description,
-                          maxLines: 5,
+                      )
+                    : Image.file(coverImage!),
+              ),
+            ),
+            // SizedBox(
+            //   height: 200,
+            //   child: InkWell(
+            //     onTap: () {
+            //       selectImage(context);
+            //     },
+            //     child: DottedBorder(
+            //       dashPattern: const [5, 3],
+            //       color: clPrimary,
+            //       padding: const EdgeInsets.all(12),
+            //       borderPadding: const EdgeInsets.all(12),
+            //       child: Center(
+            //         child: Column(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: [
+            //             Icon(
+            //               Icons.add_box_outlined,
+            //               size: 50,
+            //               color: clPrimary,
+            //             ),
+            //             const Text("Add Cover Image"),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            Container(
+              decoration: BoxDecoration(
+                color: clContainer,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              padding: const EdgeInsets.only(top: 30, left: 12, right: 12),
+              margin: const EdgeInsets.all(12),
+              child: Column(
+                children: [
+                  Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: name,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "This field can't be null";
-                            } else if (value.length < 10) {
-                              return "Enter at least 10 characters";
+                            } else if (value.length < 4) {
+                              return "Enter at least 4 characters";
                             } else {
                               return null;
                             }
                           },
-                          keyboardType: TextInputType.multiline,
+                          keyboardType: TextInputType.name,
                           decoration: const InputDecoration(
-                            counterText: "",
-                            border: InputBorder.none,
-                            hintText: "Service Description",
+                              counterText: "",
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12))),
+                              hintText: "eg. Car Wash",
+                              labelText: "Service Name"),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        DropdownButtonFormField(
+                          onChanged: (value) {
+                            setState(() {
+                              categoryValue = value;
+                              int i = category
+                                  .indexWhere((element) => element.name == value);
+                              subCategory = category[i].subCategories;
+                            });
+                          },
+                          value: categoryValue,
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "This field can't be null";
+                            } else if (value.length < 4) {
+                              return "Enter at least 4 characters";
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Select Category",
+                            labelText: "Select Category",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          dropdownColor: clContainer,
+                          items: List<DropdownMenuItem>.generate(
+                            category.length,
+                            (index) => DropdownMenuItem(
+                              value: category[index].name,
+                              child: Text(category[index].name),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        DropdownButtonFormField(
+                          onChanged: (value) {
+                            setState(() {
+                              subCategoryValue = value;
+                            });
+                          },
+                          value: subCategoryValue,
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          validator: (value) {
+                            if (value == null) {
+                              return "Please Select a Category";
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Select Sub Category",
+                            labelText: "Select Sub Category",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          dropdownColor: clContainer,
+                          items: List<DropdownMenuItem>.generate(
+                            subCategory.length,
+                            (index) => DropdownMenuItem(
+                              value: subCategory[index],
+                              child: Text(
+                                subCategory[index],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: price,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "This field can't be null";
+                            } else if (value.length < 2 ||
+                                value.length > 4 ||
+                                value.trim().characters.contains(" ")) {
+                              return "Enter valid amount";
+                            } else {
+                              return null;
+                            }
+                          },
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                              counterText: "",
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12))),
+                              hintText: "eg. 200 (in Rupees)",
+                              labelText: "Price"),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          height: 200,
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(),
+                          ),
+                          child: TextFormField(
+                            controller: description,
+                            maxLines: 5,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "This field can't be null";
+                              } else if (value.length < 10) {
+                                return "Enter at least 10 characters";
+                              } else {
+                                return null;
+                              }
+                            },
+                            keyboardType: TextInputType.multiline,
+                            decoration: const InputDecoration(
+                              counterText: "",
+                              border: InputBorder.none,
+                              hintText: "Service Description",
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (formKey.currentState!.validate()) {
-                      if (categoryValue != null && subCategoryValue != null) {
-                        await createService(context);
-                        Navigator.pop(context);
-                      } else {
-                        Navigator.pop(context);
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (formKey.currentState!.validate()) {
+                        if (categoryValue != null && subCategoryValue != null) {
+                          await createService(context);
+                          Navigator.pop(context);
+                        } else {
+                          Navigator.pop(context);
 
-                        snackMessage(context, "Please recheck entered details");
+                          snackMessage(context, "Please recheck entered details");
+                        }
                       }
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(330, 48),
-                      backgroundColor: clPrimary,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12))),
-                  child: const Text(
-                    "Submit",
-                    style: TextStyle(color: Colors.white),
+                    },
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(330, 48),
+                        backgroundColor: clPrimary,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12))),
+                    child: const Text(
+                      "Submit",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

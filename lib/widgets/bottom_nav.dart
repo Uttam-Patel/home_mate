@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_mate/config.dart';
 import 'package:home_mate/screens/admin/admin_home.dart';
+import 'package:home_mate/screens/provider/booking_requests.dart';
 import 'package:home_mate/screens/provider/provider_home.dart';
 import 'package:home_mate/screens/user/booking_status.dart';
 import 'package:home_mate/screens/user/category.dart';
@@ -28,7 +29,7 @@ class _NavBarState extends State<NavBar> {
   ];
   List<Widget> providerScreens = [
     const ProviderHome(),
-    const BookingHistoryPage(),
+    const ProviderOrders(),
     const Categories(),
     const Chat(),
     const Profile(),
@@ -51,38 +52,18 @@ class _NavBarState extends State<NavBar> {
   void initState() {
     super.initState();
     index = widget.index;
-    if (type.isEmpty && userCategories.isEmpty) {
-      auth = FirebaseAuth.instance;
-      user = auth.currentUser;
-      getUserDetails(user).whenComplete(() {
-        setState(() {
-          screens = (type == "admin")
-              ? adminScreens
-              : (type == "provider")
-                  ? providerScreens
-                  : userScreens;
-          currentScreen = screens[index];
-        });
-      });
-    } else {
-      screens = (type == "admin")
-          ? adminScreens
-          : (type == "provider")
-              ? providerScreens
-              : userScreens;
-      currentScreen = screens[index];
-    }
+    screens = (type == "admin")?adminScreens:(type=="provider")?providerScreens:userScreens;
+    currentScreen = screens[index];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: (type.isNotEmpty && userCategories.isNotEmpty)
-          ? currentScreen
-          : const Center(child: CircularProgressIndicator()),
+      body:
+          currentScreen,
       resizeToAvoidBottomInset: false,
-      bottomSheet: (type.isNotEmpty && userCategories.isNotEmpty)
-          ? SizedBox(
+      bottomSheet:
+          SizedBox(
               height: 60,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -176,7 +157,7 @@ class _NavBarState extends State<NavBar> {
                 ],
               ),
             )
-          : const SizedBox(),
+
     );
   }
 }

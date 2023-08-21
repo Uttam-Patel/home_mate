@@ -1,10 +1,12 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/screens/login.dart';
+import 'package:home_mate/screens/provider/provider_sign_up.dart';
+import 'package:home_mate/screens/sign_up.dart';
 import 'package:home_mate/screens/welcome.dart';
 import 'package:home_mate/widgets/bottom_nav.dart';
 
@@ -27,25 +29,41 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(seconds: 2),
     );
     _animationController!.forward();
-    _animationController!.addStatusListener((status)  {
+    _animationController!.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
         User? user = FirebaseAuth.instance.currentUser;
         if (user != null) {
-          if (user.displayName != null && user.displayName != "") {
-
-            // ignore: use_build_context_synchronously
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const NavBar(
-                          index: 0,
-                        )),
-                (route) => false);
+          await getUserDetails(user);
+          if (type.isNotEmpty) {
+            if (type == "provider") {
+              print(providerUser.tagline);
+              if (providerUser.tagline.isEmpty) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProviderSignUp()),
+                    (route) => false);
+              } else {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const NavBar(
+                              index: 0,
+                            )),
+                    (route) => false);
+              }
+            } else {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const NavBar(
+                            index: 0,
+                          )),
+                  (route) => false);
+            }
           } else {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const LogIn()),
-                (route) => false);
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => SignUp()));
           }
         } else {
           Navigator.pushAndRemoveUntil(

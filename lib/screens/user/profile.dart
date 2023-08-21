@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/screens/settings/about_us.dart';
+import 'package:home_mate/screens/settings/bookmarks.dart';
 import 'package:home_mate/screens/settings/change_contact.dart';
 import 'package:home_mate/screens/settings/editprofile.dart';
 import 'package:home_mate/screens/login.dart';
@@ -105,7 +106,7 @@ class _ProfileState extends State<Profile> {
               ),
               (emailVerified)
                   ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           user.email!,
@@ -152,7 +153,10 @@ class _ProfileState extends State<Profile> {
                   children: [
                     ListTile(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const ChangeContact()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ChangeContact()));
                       },
                       leading: const Icon(
                         Icons.phone,
@@ -166,8 +170,10 @@ class _ProfileState extends State<Profile> {
                     ),
                     ListTile(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const VerifyEmail()));
-
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const VerifyEmail()));
                       },
                       leading: const Icon(
                         Icons.verified_user,
@@ -181,8 +187,10 @@ class _ProfileState extends State<Profile> {
                     ),
                     ListTile(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const PaymentMethod()));
-
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PaymentMethod()));
                       },
                       leading: const Icon(
                         Icons.payment,
@@ -190,6 +198,23 @@ class _ProfileState extends State<Profile> {
                       ),
                       title: const Text(
                         "Payment Method",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: const Icon(Icons.keyboard_arrow_right),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Bookmarks()));
+                      },
+                      leading: const Icon(
+                        Icons.favorite_outline,
+                        size: 20,
+                      ),
+                      title: const Text(
+                        "Favourite Services",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       trailing: const Icon(Icons.keyboard_arrow_right),
@@ -217,8 +242,10 @@ class _ProfileState extends State<Profile> {
                   children: [
                     ListTile(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const PrivacyPolicy()));
-
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PrivacyPolicy()));
                       },
                       leading: SvgPicture.asset(
                         'assets/icons/privacy.svg',
@@ -233,8 +260,10 @@ class _ProfileState extends State<Profile> {
                     ),
                     ListTile(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const TermCondition()));
-
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const TermCondition()));
                       },
                       leading: SvgPicture.asset(
                         'assets/icons/term.svg',
@@ -249,8 +278,10 @@ class _ProfileState extends State<Profile> {
                     ),
                     ListTile(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const HelpSupport()));
-
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HelpSupport()));
                       },
                       leading: SvgPicture.asset(
                         'assets/icons/help.svg',
@@ -265,8 +296,10 @@ class _ProfileState extends State<Profile> {
                     ),
                     ListTile(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const AboutUs()));
-
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AboutUs()));
                       },
                       leading: SvgPicture.asset(
                         'assets/icons/about.svg',

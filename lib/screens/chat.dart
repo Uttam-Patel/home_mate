@@ -59,7 +59,7 @@ class _ChatState extends State<Chat> {
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
@@ -77,7 +77,7 @@ class _ChatState extends State<Chat> {
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(),
                         );
                       }
@@ -88,40 +88,43 @@ class _ChatState extends State<Chat> {
                         String fName = userMap["fName"];
                         String lName = userMap["lName"];
                         String lastMsg = chatList[index].lastMsg;
-                        return ListTile(
+                        if(lastMsg.isNotEmpty){
+                          return ListTile(
 
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ChatRoom(chatroom: chatList[index])));
-                          },
-                          tileColor: clContainer,
-                          leading: CircleAvatar(
-                            backgroundImage: (profileUrl.isNotEmpty)
-                                ? NetworkImage(profileUrl)
-                                : null,
-                            child: (profileUrl.isEmpty)
-                                ? const Icon(Icons.person_outline)
-                                : null,
-                          ),
-                          title: Text("$fName $lName"),
-                          subtitle: (lastMsg.isNotEmpty)?Text(lastMsg):null,
-                        );
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ChatRoom(chatroom: chatList[index])));
+                            },
+                            tileColor: clContainer,
+                            leading: CircleAvatar(
+                              backgroundImage: (profileUrl.isNotEmpty)
+                                  ? NetworkImage(profileUrl)
+                                  : null,
+                              child: (profileUrl.isEmpty)
+                                  ? const Icon(Icons.person_outline)
+                                  : null,
+                            ),
+                            title: Text("$fName $lName"),
+                            subtitle: (lastMsg.isNotEmpty)?Text(lastMsg):null,
+                          );
+                        }
+                        return const SizedBox();
                       }
-                      return Center(
+                      return const Center(
                         child: Text("Error Loading User Data"),
                       );
                     },
                   ),
                 );
               }
-              return Center(
+              return const Center(
                 child: Text("No Chat Found"),
               );
             }
-            return Center(
+            return const Center(
               child: Text("Something Went Wrong"),
             );
           },

@@ -148,7 +148,7 @@ class _ProviderSignUp extends State<ProviderSignUp> {
                         "tagline": tagline.text.trim(),
                         "description": description.text,
                       });
-
+                      await getUserDetails(user);
                       // ignore: use_build_context_synchronously
                       Navigator.pushAndRemoveUntil(
                           context,

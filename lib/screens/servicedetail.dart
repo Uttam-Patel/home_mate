@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/model/service_model.dart';
 import 'package:home_mate/model/user_model.dart';
 import 'package:home_mate/screens/providerdetail.dart';
+import 'package:home_mate/screens/search.dart';
 import 'package:home_mate/screens/user/book_service.dart';
 import 'package:home_mate/widgets/services_card.dart';
 
@@ -17,11 +19,13 @@ class ServiceDetail extends StatefulWidget {
 }
 
 class _ServiceDetailState extends State<ServiceDetail> {
+  User? user;
   late ServiceModel info;
   late ProviderModel provider;
   @override
   void initState() {
     info = widget.info;
+    user = FirebaseAuth.instance.currentUser;
     super.initState();
   }
 
@@ -35,7 +39,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
         stream: FirebaseFirestore.instance.collection("users").doc(info.providerId).snapshots(),
         builder: (context,snapshot){
           if(snapshot.connectionState == ConnectionState.waiting){
-            return Center(child: CircularProgressIndicator(),);
+            return const Center(child: CircularProgressIndicator(),);
           }
           Map<String,dynamic> providerMap = snapshot.data!.data() as Map<String,dynamic>;
           provider = ProviderModel.fromMap(providerMap);
@@ -57,6 +61,8 @@ class _ServiceDetailState extends State<ServiceDetail> {
                       ),
                     ),
                   ),
+
+                  //Service Details Container
                   Positioned(
                     top: (screenheight * 0.40 - ((screenheight * 0.3) / 2)),
                     left: ((screenwidth - screenwidth * 0.9) / 2),
@@ -78,21 +84,22 @@ class _ServiceDetailState extends State<ServiceDetail> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => SearchService(
-                                  //       services: FilterService.withCategory(
-                                  //           category: info.category),
-                                  //     ),
-                                  //   ),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SearchService(
+                                        category: info.category,
+                                        ),
+                                      ),
+
+                                  );
                                 },
                                 child: Text(
                                   info.category,
                                   style: const TextStyle(
                                     color: Colors.deepPurple,
                                     fontSize: 14,
+
                                   ),
                                 ),
                               ),
@@ -107,22 +114,25 @@ class _ServiceDetailState extends State<ServiceDetail> {
                               const SizedBox(
                                 width: 5,
                               ),
-                              InkWell(
-                                onTap: (){
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => SearchService(
-                                  //       services: FilterService.withSubcategory(
-                                  //           subCategory: info.subCategory),
-                                  //     ),
-                                  //   ),
-                                  // );
-                                },
-                                child: Text(
-                                  info.subCategory,
-                                  style: const TextStyle(
-                                    fontSize: 14,
+                              Expanded(
+                                child: InkWell(
+                                  onTap: (){
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => SearchService(
+                                    //       services: FilterService.withSubcategory(
+                                    //           subCategory: info.subCategory),
+                                    //     ),
+                                    //   ),
+                                    // );
+                                  },
+                                  child: Text(
+                                    info.subCategory,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                        overflow: TextOverflow.ellipsis
+                                    ),
                                   ),
                                 ),
                               ),
@@ -133,6 +143,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
+                              overflow: TextOverflow.ellipsis
                             ),
                           ),
                           Text(
@@ -199,15 +210,30 @@ class _ServiceDetailState extends State<ServiceDetail> {
                       ),
                     ),
                   ),
+
+                  //Favourite Button
                   Positioned(
                     right: 15,
                     top: 15,
-                    child: CircleAvatar(
-                        radius: 17,
-                        backgroundColor: clBG,
-                        child: const Icon(Icons.favorite_outline)
+                    child: InkWell(
+                      onTap: ()async{
+                        processDialog(context);
+                        await updateBookmarks(info, user);
+                        // ignore: use_build_context_synchronously
+                        Navigator.pop(context);
+                        setState(() {
+
+                        });
+                      },
+                      child: CircleAvatar(
+                          radius: 17,
+                          backgroundColor: clBG,
+                          child: (bookmarks.where((element) => element.id == info.id).isNotEmpty)?const Icon(Icons.favorite,color: Colors.red,):const Icon(Icons.favorite_outline,color: Colors.grey,)
+                      ),
                     ),
                   ),
+
+                  //Back Button
                   Positioned(
                     left: 15,
                     top: 15,

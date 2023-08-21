@@ -21,14 +21,23 @@ class ServiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ServiceDetail(info: service),),);
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ServiceDetail(info: service),
+          ),
+        );
       },
       child: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("users").doc(service.providerId).snapshots(),
-        builder: (context,snapshot){
-          if(snapshot.hasData){
-            Map<String,dynamic> providerMap = snapshot.data!.data() as Map<String,dynamic>;
+        stream: FirebaseFirestore.instance
+            .collection("users")
+            .doc(service.providerId)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            Map<String, dynamic> providerMap =
+                snapshot.data!.data() as Map<String, dynamic>;
             ProviderModel provider = ProviderModel.fromMap(providerMap);
             return Container(
               width: width,
@@ -47,9 +56,14 @@ class ServiceCard extends StatelessWidget {
                       Container(
                         height: 160,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(12)),
                           image: DecorationImage(
-                            image:(service.coverUrl.isNotEmpty)? NetworkImage(service.coverUrl):const AssetImage("assets/images/new_service.png") as ImageProvider,
+                            image: (service.coverUrl.isNotEmpty)
+                                ? NetworkImage(service.coverUrl)
+                                : const AssetImage(
+                                        "assets/images/new_service.png")
+                                    as ImageProvider,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -58,18 +72,29 @@ class ServiceCard extends StatelessWidget {
                         top: 7,
                         left: 7,
                         child: InkWell(
-                          onTap: (){
-                            //Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchService(services: FilterService.withCategory(category: service.category),),),);
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SearchService(
+                                  category: service.category,
+                                ),
+                              ),
+                            );
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: clBG,
+                              color: clPrimary,
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 5),
                             child: Text(
                               service.category,
-                              style: TextStyle(fontSize: 12, color: clPrimary),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: clBG,
+                              ),
                             ),
                           ),
                         ),
@@ -82,15 +107,18 @@ class ServiceCard extends StatelessWidget {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: clPrimary,
-                            border: Border.all(color: clBG,width: 3),
+                            border: Border.all(color: clBG, width: 3),
                             borderRadius: BorderRadius.circular(25),
                           ),
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                             horizontal: 15,
                           ),
                           child: Text(
                             "₹${service.price.toInt().toString()}",
-                            style: TextStyle(fontSize: 15, color: clBG,fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: clBG,
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
@@ -98,7 +126,7 @@ class ServiceCard extends StatelessWidget {
                   ),
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(12),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -106,32 +134,37 @@ class ServiceCard extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          SizedBox(
-                            height: 50,
+                          Expanded(
                             child: Text(
                               service.name,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                overflow: TextOverflow.clip,
-                              ),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  overflow: TextOverflow.ellipsis),
                             ),
                           ),
                           const SizedBox(
                             height: 10,
                           ),
                           InkWell(
-                            onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProviderDetails(providerId: provider.id),),);
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProviderDetails(providerId: provider.id),
+                                ),
+                              );
                             },
                             child: Row(
                               children: [
                                 CircleAvatar(
-                                  backgroundImage: (provider.profileUrl.isNotEmpty)
-                                      ? NetworkImage(provider.profileUrl)
-                                      : null,
+                                  backgroundImage:
+                                      (provider.profileUrl.isNotEmpty)
+                                          ? NetworkImage(provider.profileUrl)
+                                          : null,
                                   child: (!provider.profileUrl.isNotEmpty)
-                                      ? Icon(Icons.person_outline)
+                                      ? const Icon(Icons.person_outline)
                                       : null,
                                 ),
                                 const SizedBox(
@@ -149,7 +182,9 @@ class ServiceCard extends StatelessWidget {
               ),
             );
           }
-          return Center(child: CircularProgressIndicator(),);
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );
