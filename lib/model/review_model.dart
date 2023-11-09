@@ -1,6 +1,6 @@
 class ReviewModel {
   String? review;
-  double rating;
+  int rating;
   String userId;
   DateTime date;
 

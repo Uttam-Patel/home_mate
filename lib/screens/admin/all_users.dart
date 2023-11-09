@@ -19,11 +19,8 @@ class _AllUsers extends State<AllUsers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: clPrimary,
         title: const Text(
           "All Users",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: StreamBuilder(
@@ -35,7 +32,8 @@ class _AllUsers extends State<AllUsers> {
               );
             }
             if (snapshot.hasData) {
-              List allUsers = snapshot.data!.docs.map((e) => e.data()).toList();
+              List<Map<String,dynamic>> allUsers = snapshot.data!.docs.map((e) => e.data()).toList();
+              print(allUsers);
               List<ProviderModel> providerList = allUsers
                   .where((e) => e["type"] == "provider")
                   .toList()

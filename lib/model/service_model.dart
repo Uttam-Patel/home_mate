@@ -11,6 +11,7 @@ class ServiceModel {
   String coverUrl;
   double price;
   double rating;
+  int? ratedBy;
   bool isFeatured;
   bool isSlider;
   String providerId;
@@ -27,6 +28,7 @@ class ServiceModel {
     required this.providerId,
     required this.isFeatured,
     required this.isSlider,
+    this.ratedBy,
   });
 
   factory ServiceModel.fromMap(Map<String, dynamic> map) {
@@ -42,6 +44,7 @@ class ServiceModel {
       providerId: map['providerId'],
       isFeatured: map['isFeatured'],
       isSlider: map['isSlider'],
+      ratedBy: map['ratedBy']??0,
     );
   }
 
@@ -58,6 +61,7 @@ class ServiceModel {
       "providerId": providerId,
       "isFeatured": isFeatured,
       "isSlider": isSlider,
+      "ratedBy":ratedBy??0,
     };
   }
 }

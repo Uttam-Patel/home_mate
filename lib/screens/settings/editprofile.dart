@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
-import 'package:home_mate/screens/user/profile.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../widgets/bottom_nav.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -56,14 +57,8 @@ class _EditProfileState extends State<EditProfile> {
     double screenheight = MediaQuery.of(context).size.height * 1;
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        //leading: IconButton(onPressed: (){Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>const NavBar(index: 3)), (route) => false)},icon:const Icon(Icons.arrow_back,color: Colors.white,),),
-        backgroundColor: clPrimary,
         title: const Text(
           "Edit Profile",
-          style: TextStyle(
-            color: Colors.white,
-          ),
         ),
       ),
       body: ListView(
@@ -188,12 +183,12 @@ class _EditProfileState extends State<EditProfile> {
                   if (formKey.currentState!.validate()) {
                     processDialog(context);
                     if (email.text.trim() != emailID) {
-                      try{
+                      try {
                         await user.updateEmail(email.text.trim());
-                      } on FirebaseException catch(e){
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                        snackMessage(context, e.message!);
+                      } on FirebaseException catch (e) {
+                        Navigator.popAndPushNamed(context, NavBar.routeName,
+                            arguments: NavBar(index: 4));
+                        snackMessage(msg: e.message!);
                       }
                     }
                     String url = await uploadProfile(profileImage);
@@ -204,7 +199,8 @@ class _EditProfileState extends State<EditProfile> {
                     }
 
                     if (profileImage != null) {
-                      await user.updatePhotoURL(url.isNotEmpty?url:profileUrl);
+                      await user
+                          .updatePhotoURL(url.isNotEmpty ? url : profileUrl);
                     }
                     await FirebaseFirestore.instance
                         .collection("users")
@@ -213,12 +209,8 @@ class _EditProfileState extends State<EditProfile> {
                       "email": email.text.trim(),
                       "fName": fname.text.trim(),
                       "lName": lname.text.trim(),
-                      "profileUrl": url.isNotEmpty?url:profileUrl,
-                    });
-                    // ignore: use_build_context_synchronously
-                    Navigator.pop(context);
-                    // ignore: use_build_context_synchronously
-                    Navigator.pop(context);
+                      "profileUrl": url.isNotEmpty ? url : profileUrl,
+                    }).then((value) => Navigator.pushNamedAndRemoveUntil(context, NavBar.routeName, (route) => false,arguments:const NavBar(index: 4)),);
                   }
                 },
                 child: const Text(

@@ -42,11 +42,8 @@ class _ChatState extends State<Chat> {
         ),
       ),
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: clPrimary,
         title: const Text(
           "Chat",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: Container(

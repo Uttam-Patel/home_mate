@@ -28,11 +28,8 @@ class _ChatRoomState extends State<ChatRoom> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: clBG,
       appBar: AppBar(
         titleSpacing: 1,
-        iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: clPrimary,
         title: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection("users")

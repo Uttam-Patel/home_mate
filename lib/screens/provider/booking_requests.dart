@@ -29,11 +29,8 @@ class _ProviderOrders extends State<ProviderOrders> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: clPrimary,
         title: const Text(
           "Orders",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: Padding(

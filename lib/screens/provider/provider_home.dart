@@ -17,12 +17,9 @@ class _ProviderHome extends State<ProviderHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: clBG,
       appBar: AppBar(
-        backgroundColor: clPrimary,
         title: const Text(
           "Dashboard",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: Container(

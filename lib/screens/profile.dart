@@ -13,6 +13,8 @@ import 'package:home_mate/screens/settings/privacy_policy.dart';
 import 'package:home_mate/screens/settings/terms_and_conditions.dart';
 import 'package:home_mate/screens/settings/verify_email.dart';
 
+import '../config.dart';
+
 class Profile extends StatefulWidget {
   const Profile({super.key});
 
@@ -32,6 +34,7 @@ class _ProfileState extends State<Profile> {
     auth = FirebaseAuth.instance;
     user = auth.currentUser!;
     profileUrl = user.photoURL;
+    print(profileUrl);
     emailVerified = user.emailVerified;
   }
 
@@ -41,10 +44,8 @@ class _ProfileState extends State<Profile> {
     double screenheight = MediaQuery.of(context).size.height * 1;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: clPrimary,
         title: const Text(
           "Profile",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: ListView(
@@ -323,12 +324,15 @@ class _ProfileState extends State<Profile> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: clPrimary),
                     onPressed: () async {
-                      await FirebaseAuth.instance.signOut().then((value) =>
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LogIn()),
-                              (route) => false));
+                      await FirebaseAuth.instance.signOut().then((value){
+                        type = "";
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LogIn()),
+                                (route) => false);
+                      }
+                          );
                     },
                     child: const Text(
                       "Log Out",

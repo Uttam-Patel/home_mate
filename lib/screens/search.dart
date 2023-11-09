@@ -41,11 +41,8 @@ class _SearchServiceState extends State<SearchService> {
     return Scaffold(
       backgroundColor: clContainer,
       appBar: AppBar(
-        backgroundColor: clPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Available Services",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: ListView(

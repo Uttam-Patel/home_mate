@@ -23,13 +23,9 @@ class _PaymentMethodState extends State<PaymentMethod> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: clBG,
       appBar: AppBar(
-        backgroundColor: clPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Payment Method",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: StreamBuilder(

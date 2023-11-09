@@ -73,11 +73,8 @@ class _BookServiceState extends State<BookService> {
         (subTotal + taxAmount - discountAmount).toStringAsFixed(2));
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: clPrimary,
         title: const Text(
           "Book Service",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: ListView(

@@ -20,23 +20,35 @@ class _ProviderServicesState extends State<ProviderServices> {
         padding: const EdgeInsets.all(12),
         margin: const EdgeInsets.only(bottom: 10),
         child: StreamBuilder(
-            stream: FirebaseFirestore.instance.collection("services").where("providerId",isEqualTo: providerUser.id).snapshots(),
-            builder: (context,snapshot){
-              if(snapshot.connectionState == ConnectionState.waiting){
-                return Center(child: CircularProgressIndicator(),);
+            stream: FirebaseFirestore.instance
+                .collection("services")
+                .where("providerId",
+                    isEqualTo: providerUser.id)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               }
-              if(snapshot.hasData){
-                List<ServiceModel> serviceList = snapshot.data!.docs.map((e) => ServiceModel.fromMap(e.data())).toList();
-                if(serviceList.isNotEmpty){
+              if (snapshot.hasData) {
+                List<ServiceModel> serviceList = snapshot.data!.docs
+                    .map((e) => ServiceModel.fromMap(e.data()))
+                    .toList();
+                if (serviceList.isNotEmpty) {
                   return ListView.builder(
                       itemCount: serviceList.length,
-                      itemBuilder: (context,index)=>ServiceCard(service: serviceList[index], width: MediaQuery.of(context).size.width)
-                  );
+                      itemBuilder: (context, index) => ServiceCard(
+                          service: serviceList[index],
+                          width: MediaQuery.of(context).size.width));
                 }
-                return Center(child: Text("No Services Found"),);
+                return const Center(
+                  child: Text("No Services Found"),
+                );
               }
-              return Center(child: Text("Something went wrong"),);
-
+              return const Center(
+                child: Text("Something went wrong"),
+              );
             }),
       ),
     );

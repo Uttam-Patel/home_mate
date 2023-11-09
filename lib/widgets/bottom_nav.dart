@@ -6,13 +6,15 @@ import 'package:home_mate/screens/admin/admin_home.dart';
 import 'package:home_mate/screens/provider/booking_requests.dart';
 import 'package:home_mate/screens/provider/provider_home.dart';
 import 'package:home_mate/screens/user/booking_status.dart';
-import 'package:home_mate/screens/user/category.dart';
+import 'package:home_mate/screens/category.dart';
 import 'package:home_mate/screens/chat.dart';
 import 'package:home_mate/screens/user/home.dart';
-import 'package:home_mate/screens/user/profile.dart';
+import 'package:home_mate/screens/profile.dart';
 
 class NavBar extends StatefulWidget {
+  static const routeName = "/navbar";
   final int index;
+
   const NavBar({super.key, required this.index});
 
   @override
@@ -52,111 +54,113 @@ class _NavBarState extends State<NavBar> {
   void initState() {
     super.initState();
     index = widget.index;
-    screens = (type == "admin")?adminScreens:(type=="provider")?providerScreens:userScreens;
+    screens = (type == "admin") ? adminScreens : (type == "provider")
+        ? providerScreens
+        : userScreens;
     currentScreen = screens[index];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-          currentScreen,
-      resizeToAvoidBottomInset: false,
-      bottomSheet:
-          SizedBox(
-              height: 60,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      index = 0;
-                      currentScreen = screens[index];
-                      setState(() {});
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset(
-                        (index == 0)
-                            ? "assets/icons/Home1.svg"
-                            : "assets/icons/Home.svg",
-                        height: 23,
-                        width: 23,
-                      ),
-                    ),
+        body:
+        currentScreen,
+        resizeToAvoidBottomInset: false,
+        bottomSheet:
+        SizedBox(
+          height: 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              InkWell(
+                onTap: () {
+                  index = 0;
+                  currentScreen = screens[index];
+                  setState(() {});
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset(
+                    (index == 0)
+                        ? "assets/icons/Home1.svg"
+                        : "assets/icons/Home.svg",
+                    height: 23,
+                    width: 23,
                   ),
-                  InkWell(
-                    onTap: () {
-                      index = 1;
-                      currentScreen = screens[index];
-                      setState(() {});
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset(
-                        (index == 1)
-                            ? "assets/icons/Ticket1.svg"
-                            : "assets/icons/Ticket.svg",
-                        height: 23,
-                        width: 23,
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      index = 2;
-                      currentScreen = screens[index];
-                      setState(() {});
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset(
-                        (index == 2)
-                            ? "assets/icons/Category1.svg"
-                            : "assets/icons/Category.svg",
-                        height: 23,
-                        width: 23,
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      index = 3;
-                      currentScreen = screens[index];
-                      setState(() {});
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset(
-                        (index == 3)
-                            ? "assets/icons/Chat1.svg"
-                            : "assets/icons/Chat.svg",
-                        height: 23,
-                        width: 23,
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      index = 4;
-                      currentScreen = screens[index];
-                      setState(() {});
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset(
-                        (index == 4)
-                            ? "assets/icons/Profile1.svg"
-                            : "assets/icons/Profile.svg",
-                        height: 23,
-                        width: 23,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            )
+              InkWell(
+                onTap: () {
+                  index = 1;
+                  currentScreen = screens[index];
+                  setState(() {});
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset(
+                    (index == 1)
+                        ? "assets/icons/Ticket1.svg"
+                        : "assets/icons/Ticket.svg",
+                    height: 23,
+                    width: 23,
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  index = 2;
+                  currentScreen = screens[index];
+                  setState(() {});
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset(
+                    (index == 2)
+                        ? "assets/icons/Category1.svg"
+                        : "assets/icons/Category.svg",
+                    height: 23,
+                    width: 23,
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  index = 3;
+                  currentScreen = screens[index];
+                  setState(() {});
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset(
+                    (index == 3)
+                        ? "assets/icons/Chat1.svg"
+                        : "assets/icons/Chat.svg",
+                    height: 23,
+                    width: 23,
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  index = 4;
+                  currentScreen = screens[index];
+                  setState(() {});
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset(
+                    (index == 4)
+                        ? "assets/icons/Profile1.svg"
+                        : "assets/icons/Profile.svg",
+                    height: 23,
+                    width: 23,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
 
     );
   }

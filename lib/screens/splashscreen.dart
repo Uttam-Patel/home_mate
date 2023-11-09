@@ -1,10 +1,7 @@
-// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
-import 'package:home_mate/screens/login.dart';
 import 'package:home_mate/screens/provider/provider_sign_up.dart';
 import 'package:home_mate/screens/sign_up.dart';
 import 'package:home_mate/screens/welcome.dart';
@@ -31,44 +28,39 @@ class _SplashScreenState extends State<SplashScreen>
     _animationController!.forward();
     _animationController!.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
+
         User? user = FirebaseAuth.instance.currentUser;
         if (user != null) {
-          await getUserDetails(user);
-          if (type.isNotEmpty) {
-            if (type == "provider") {
-              print(providerUser.tagline);
-              if (providerUser.tagline.isEmpty) {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProviderSignUp()),
-                    (route) => false);
+          await getUserDetails(user,context).then((value) {
+            if (type.isNotEmpty) {
+              if (type == "provider") {
+                if (providerUser.tagline.isEmpty) {
+                  Navigator.pushNamedAndRemoveUntil(context, ProviderSignUp.routeName, (route) => false);
+                } else {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      NavBar.routeName,
+                      arguments: const NavBar(index: 0),
+                          (route) => false);
+                }
               } else {
-                Navigator.pushAndRemoveUntil(
+                Navigator.pushNamedAndRemoveUntil(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const NavBar(
-                              index: 0,
-                            )),
-                    (route) => false);
+                    NavBar.routeName,
+                        arguments: const NavBar(index: 0),
+                        (route) => false);
               }
             } else {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const NavBar(
-                            index: 0,
-                          )),
-                  (route) => false);
+              Navigator.pushNamed(
+                  context, SignUp.routeName);
             }
-          } else {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => SignUp()));
-          }
+          });
+
+
         } else {
-          Navigator.pushAndRemoveUntil(
+          Navigator.pushNamedAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+              WelcomeScreen.routeName,
               (route) => false);
         }
       }

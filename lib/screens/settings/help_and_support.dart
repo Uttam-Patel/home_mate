@@ -25,13 +25,9 @@ class HelpSupport extends StatelessWidget {
       // Add more FAQ items here
     ];
     return Scaffold(
-      backgroundColor: clBG,
       appBar: AppBar(
-        backgroundColor: clPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Help & Support",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: Padding(

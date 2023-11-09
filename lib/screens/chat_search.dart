@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +6,6 @@ import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/model/chat_model.dart';
 import 'package:home_mate/model/user_model.dart';
 import 'package:home_mate/screens/chatroom.dart';
-import 'package:uuid/uuid.dart';
 
 class ChatSearch extends StatefulWidget {
   const ChatSearch({Key? key}) : super(key: key);
@@ -32,11 +29,8 @@ class _ChatSearchState extends State<ChatSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: clPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Chat Search",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: Column(
@@ -79,7 +73,7 @@ class _ChatSearchState extends State<ChatSearch> {
                         .startAt([
                         query.trim(),
                       ]).endAt([
-                        query.trim() + '\uf8ff',
+                        '${query.trim()}\uf8ff',
                       ]).snapshots()
                     : FirebaseFirestore.instance
                         .collection("users")
@@ -95,8 +89,9 @@ class _ChatSearchState extends State<ChatSearch> {
                     List<ProviderModel> userList = snapshot.data!.docs
                         .map((e) => ProviderModel.fromMap(e.data()))
                         .toList();
-                    if (type == "provider"){
-                      userList.removeWhere((element) => element.id == providerUser.id);
+                    if (type == "provider") {
+                      userList.removeWhere(
+                          (element) => element.id == providerUser.id);
                     }
                     if (userList.isNotEmpty) {
                       return usersList(userList);
@@ -125,41 +120,46 @@ class _ChatSearchState extends State<ChatSearch> {
         String lName = userList[index].lName;
         return ListTile(
           onTap: () async {
-            QuerySnapshot snapshot = await FirebaseFirestore.instance
+            await FirebaseFirestore.instance
                 .collection("users")
                 .doc(userId)
                 .collection("chatRooms")
-                .get();
-            if (snapshot.docs.isNotEmpty) {
-              List<ChatRoomModel> chatRoomList = snapshot.docs
-                  .map((e) =>
-                      ChatRoomModel.fromMap(e.data() as Map<String, dynamic>))
-                  .toList()
-                  .where((element) => element.anotherUserId == user!.uid)
-                  .toList();
-              if (chatRoomList.isNotEmpty && chatRoomList.length == 1) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ChatRoom(chatroom: chatRoomList[0])));
+                .get().then((snapshot)async {
+              if (snapshot.docs.isNotEmpty) {
+                List<ChatRoomModel> chatRoomList = snapshot.docs
+                    .map((e) =>
+                    ChatRoomModel.fromMap(e.data()))
+                    .toList()
+                    .where((element) => element.anotherUserId == user!.uid)
+                    .toList();
+                if (chatRoomList.isNotEmpty && chatRoomList.length == 1) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ChatRoom(chatroom: chatRoomList[0])));
+                } else {
+                  await ChatRoomModel.createChatroom(
+                      user!.uid, userList[index].id).then((newChatRoom) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ChatRoom(chatroom: newChatRoom)));
+                  });
+
+                }
               } else {
-                ChatRoomModel newChatRoom = await ChatRoomModel.createChatroom(
-                    user!.uid, userList[index].id);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ChatRoom(chatroom: newChatRoom)));
+                await ChatRoomModel.createChatroom(
+                    user!.uid, userList[index].id).then((newChatRoom) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ChatRoom(chatroom: newChatRoom)));
+                });
+
               }
-            } else {
-              ChatRoomModel newChatRoom = await ChatRoomModel.createChatroom(user!.uid, userList[index].id);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          ChatRoom(chatroom: newChatRoom)));
-            }
+            });
+
           },
           tileColor: clContainer,
           leading: CircleAvatar(

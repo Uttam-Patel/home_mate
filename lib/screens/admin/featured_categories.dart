@@ -16,11 +16,8 @@ class _FeaturedCategoriesState extends State<FeaturedCategories> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: clPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Featured Categories",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: StreamBuilder(
@@ -77,7 +74,7 @@ class _FeaturedCategoriesState extends State<FeaturedCategories> {
                                             });
                                             Navigator.pop(context);
                                           } on FirebaseException catch (e) {
-                                            snackMessage(context, e.message!);
+                                            snackMessage(msg:e.message!);
                                             Navigator.pop(context);
                                           }
                                         },
@@ -121,7 +118,7 @@ class _FeaturedCategoriesState extends State<FeaturedCategories> {
                                             });
                                             Navigator.pop(context);
                                           } on FirebaseException catch (e) {
-                                            snackMessage(context, e.message!);
+                                            snackMessage(msg: e.message!);
                                             Navigator.pop(context);
                                           }
                                         },

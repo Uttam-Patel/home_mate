@@ -7,13 +7,9 @@ class AboutUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: clBG,
 
       appBar: AppBar(
-        backgroundColor: clPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text("About Us",
-          style: TextStyle(color: Colors.white),),
+        title: const Text("About Us",),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

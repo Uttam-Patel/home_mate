@@ -31,8 +31,8 @@ class UserModel {
         fName: map['fName'],
         lName: map['lName'],
         email: map['email'],
-        location: map['location'],
-        profileUrl: map['profileUrl'],
+        location: map['location']??'',
+        profileUrl: map['profileUrl']??'',
         phone: map['phone'],
         joined: DateTime.tryParse(map['joined'])!,
         paymentMethod: map['paymentMethod']
@@ -68,6 +68,7 @@ class ProviderModel {
   String type = "provider";
   DateTime joined;
   double rating;
+  int? ratedBy;
   String tagline;
   String description;
   String? paymentMethod;
@@ -84,6 +85,7 @@ class ProviderModel {
     required this.tagline,
     required this.description,
     required this.rating,
+    this.ratedBy,
     this.paymentMethod,
   });
 
@@ -100,6 +102,7 @@ class ProviderModel {
       tagline: map['tagline'],
       description: map['description'],
       rating: map['rating'],
+      ratedBy: map['ratedBy']??0,
       paymentMethod: map['paymentMethod'],
     );
   }
@@ -124,6 +127,7 @@ class ProviderModel {
       "tagline": tagline,
       "description": description,
       "rating": rating,
+      "ratedBy": ratedBy??0,
       "paymentMethod":paymentMethod,
     };
   }

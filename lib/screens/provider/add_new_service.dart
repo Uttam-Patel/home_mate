@@ -44,13 +44,9 @@ class _AddServiceState extends State<AddService> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: clBG,
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: clPrimary,
         title: const Text(
           "New Service",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: RefreshIndicator(
@@ -298,7 +294,7 @@ class _AddServiceState extends State<AddService> {
                         } else {
                           Navigator.pop(context);
 
-                          snackMessage(context, "Please recheck entered details");
+                          snackMessage(msg: "Please recheck entered details");
                         }
                       }
                     },
@@ -385,7 +381,7 @@ class _AddServiceState extends State<AddService> {
       Navigator.pop(context);
     } on FirebaseException catch (e) {
       Navigator.pop(context);
-      snackMessage(context, e.code);
+      snackMessage(msg:e.code);
     }
   }
 }

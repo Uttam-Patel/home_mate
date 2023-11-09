@@ -25,13 +25,9 @@ class _VerifyEmailState extends State<VerifyEmail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: clBG,
       appBar: AppBar(
-        backgroundColor: clPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Verify Email",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: Container(
@@ -84,12 +80,12 @@ class _VerifyEmailState extends State<VerifyEmail> {
   void verifyUserEmail(context) async {
     processDialog(context);
     if(user!.emailVerified){
-      snackMessage(context, "Your email is already verified!");
+      snackMessage(msg:"Your email is already verified!");
       Navigator.pop(context);
       Navigator.pop(context);
     }else{
       await user!.sendEmailVerification();
-      snackMessage(context, "Email Verification mail is sent to ${user!.email}");
+      snackMessage(msg:"Email Verification mail is sent to ${user!.email}");
       Navigator.pop(context);
       Navigator.pop(context);
     }

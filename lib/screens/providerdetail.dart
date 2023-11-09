@@ -26,13 +26,9 @@ class _ProviderDetailsState extends State<ProviderDetails> {
     double screenheight = MediaQuery.of(context).size.height * 1;
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: clPrimary,
         title: const Text(
           "Provider Detail",
-          style: TextStyle(
-            color: Colors.white,
-          ),
+
         ),
       ),
       body: StreamBuilder(

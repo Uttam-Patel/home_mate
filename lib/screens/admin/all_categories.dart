@@ -18,11 +18,8 @@ class _AllCategoriesState extends State<AllCategories> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: clPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Categories",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: StreamBuilder(
@@ -92,7 +89,7 @@ class _AllCategoriesState extends State<AllCategories> {
                                               .doc(categoryList[index].id)
                                               .delete();
                                         } on FirebaseException catch (e) {
-                                          snackMessage(context, e.message!);
+                                          snackMessage(msg:e.message!);
                                         }
                                       },
                                       child: Icon(Icons.delete)),

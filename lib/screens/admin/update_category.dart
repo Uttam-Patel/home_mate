@@ -44,11 +44,8 @@ class _UpdateCategory extends State<UpdateCategory> {
     return Scaffold(
       backgroundColor: clBG,
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: clPrimary,
         title: const Text(
           "Update Category",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: ListView(children: [
@@ -217,7 +214,7 @@ class _UpdateCategory extends State<UpdateCategory> {
                     await createCategory(context);
                     Navigator.pop(context);
                   } else {
-                    snackMessage(context, "Please recheck entered details");
+                    snackMessage(msg: "Please recheck entered details");
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -288,7 +285,7 @@ class _UpdateCategory extends State<UpdateCategory> {
       Navigator.pop(context);
     } on FirebaseException catch (e) {
       Navigator.pop(context);
-      snackMessage(context, e.code);
+      snackMessage(msg: e.code);
     }
   }
 

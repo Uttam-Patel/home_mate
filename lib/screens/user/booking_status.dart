@@ -33,11 +33,8 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: clPrimary,
         title: const Text(
           "Booking",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: SingleChildScrollView(

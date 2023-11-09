@@ -9,7 +9,7 @@ import 'package:home_mate/screens/admin/featured_categories.dart';
 import 'package:home_mate/screens/admin/featured_services.dart';
 import 'package:home_mate/screens/admin/slider_services.dart';
 import 'package:home_mate/screens/search.dart';
-import 'package:home_mate/screens/user/category.dart';
+import 'package:home_mate/screens/category.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({Key? key}) : super(key: key);
@@ -22,12 +22,9 @@ class _AdminHomeState extends State<AdminHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: clBG,
       appBar: AppBar(
-        backgroundColor: clPrimary,
         title: const Text(
           "Dashboard",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: Container(

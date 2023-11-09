@@ -18,62 +18,85 @@ class _AllProviderServicesState extends State<AllProviderServices> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: clPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text("Services",style: TextStyle(color: Colors.white),),
+        title: const Text(
+          "Services",
+        ),
       ),
       body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection("services").where("providerId",isEqualTo: providerUser.id).snapshots(),
-          builder: (context,snapshot){
-            if(snapshot.connectionState == ConnectionState.waiting){
-              return const Center(child: CircularProgressIndicator(),);
+          stream: FirebaseFirestore.instance
+              .collection("services")
+              .where("providerId",
+                  isEqualTo: providerUser.id)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
-            if(snapshot.hasData){
-              List<ServiceModel> serviceList = snapshot.data!.docs.map((e) => ServiceModel.fromMap(e.data())).toList();
-              if(serviceList.isNotEmpty){
-
+            if (snapshot.hasData) {
+              List<ServiceModel> serviceList = snapshot.data!.docs
+                  .map((e) => ServiceModel.fromMap(e.data()))
+                  .toList();
+              if (serviceList.isNotEmpty) {
                 return Container(
                   padding: const EdgeInsets.all(8),
                   child: ListView.builder(
                       itemCount: serviceList.length,
-                      itemBuilder: (context,index)=>
-
-                          ListTile(
-                            onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>ServiceDetail(info: serviceList[index])));
+                      itemBuilder: (context, index) => ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ServiceDetail(
+                                          info: serviceList[index])));
                             },
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
-                              child: (serviceList[index].coverUrl.isNotEmpty)?Image.network(serviceList[index].coverUrl):const Icon(Icons.home_repair_service),
+                              child: (serviceList[index].coverUrl.isNotEmpty)
+                                  ? Image.network(serviceList[index].coverUrl)
+                                  : const Icon(Icons.home_repair_service),
                             ),
                             title: Text(serviceList[index].name),
                             subtitle: Text(serviceList[index].category),
                             trailing: SizedBox(
                               width: 60,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   InkWell(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>UpdateService(service: serviceList[index])));
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UpdateService(
+                                                        service: serviceList[
+                                                            index])));
                                       },
-                                      child: Icon(Icons.edit)),
+                                      child: const Icon(Icons.edit)),
                                   InkWell(
-                                      onTap: ()async{
-                                        await FirebaseFirestore.instance.collection("services").doc(serviceList[index].id).delete();
+                                      onTap: () async {
+                                        await FirebaseFirestore.instance
+                                            .collection("services")
+                                            .doc(serviceList[index].id)
+                                            .delete();
                                       },
-                                      child: Icon(Icons.delete)),
+                                      child: const Icon(Icons.delete)),
                                 ],
                               ),
                             ),
-                          )
-                  ),
+                          )),
                 );
               }
-              return const Center(child: Text("No Services Found"),);
+              return const Center(
+                child: Text("No Services Found"),
+              );
             }
-            return const Center(child: Text("Something went wrong"),);
-
+            return const Center(
+              child: Text("Something went wrong"),
+            );
           }),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
 import 'package:home_mate/model/category_model.dart';
@@ -32,19 +33,16 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    double screenwidth = MediaQuery.of(context).size.width * 1;
-    double screenheight = MediaQuery.of(context).size.height * 1;
-
     return Scaffold(
       backgroundColor: clBG,
       body: SafeArea(
         child: ListView(
           children: [
-            topSearchSlider(screenwidth, screenheight),
+            topSearchSlider(),
             homeCategories(),
             homeServices(),
-            const SizedBox(
-              height: 60,
+            SizedBox(
+              height: 60.h,
             ),
           ],
         ),
@@ -54,8 +52,8 @@ class _HomeState extends State<Home> {
 
   Container homeServices() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      margin: const EdgeInsets.only(top: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+      margin: EdgeInsets.only(top: 20.h),
       color: clContainer,
       child: Column(
         children: [
@@ -63,11 +61,11 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 "Featured Services",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  fontSize: 20.sp,
                 ),
               ),
               TextButton(
@@ -82,7 +80,7 @@ class _HomeState extends State<Home> {
                 child: Text(
                   "View All",
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     color: clBody,
                   ),
                 ),
@@ -107,14 +105,14 @@ class _HomeState extends State<Home> {
 
                   if (featuredServices.isNotEmpty) {
                     return SizedBox(
-                      height: 320,
+                      height: 320.h,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: featuredServices.length,
                           itemBuilder: (context, index) {
                             return ServiceCard(
                               service: featuredServices[index],
-                              width: 250,
+                              width: 250.w,
                             );
                           }),
                     );
@@ -134,10 +132,10 @@ class _HomeState extends State<Home> {
 
   Container homeCategories() {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
+      padding: EdgeInsets.symmetric(
+        horizontal: 20.w,
       ),
-      margin: const EdgeInsets.only(top: 60),
+      margin: EdgeInsets.only(top: 60.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -145,11 +143,11 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 "Featured Category",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  fontSize: 20.sp,
                 ),
               ),
               TextButton(
@@ -169,15 +167,15 @@ class _HomeState extends State<Home> {
                 child: Text(
                   "View All",
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     color: clBody,
                   ),
                 ),
               )
             ],
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: 10.h,
           ),
           StreamBuilder(
               stream: FirebaseFirestore.instance
@@ -198,13 +196,13 @@ class _HomeState extends State<Home> {
                   if (featuredCategories.isNotEmpty) {
                     return Wrap(
                       alignment: WrapAlignment.start,
-                      spacing: 10,
-                      runSpacing: 15,
+                      spacing: 10.w,
+                      runSpacing: 10.w,
                       children: [
                         for (int i = 0; i < featuredCategories.length; i++)
                           SizedBox(
-                              height: 120,
-                              child: CategoryCard(
+                              height: 120.h,
+                              child: CategoryCard.featured(
                                 category: featuredCategories[i],
                               )),
                       ],
@@ -223,13 +221,13 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Stack topSearchSlider(double screenwidth, double screenheight) {
+  Stack topSearchSlider() {
     return Stack(
       clipBehavior: Clip.none,
       children: [
         SizedBox(
-          height: screenheight * 0.27,
-          width: screenwidth,
+          height: 0.27.sh,
+          width: 1.sw,
           child: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection("services")
@@ -282,19 +280,21 @@ class _HomeState extends State<Home> {
           ),
         ),
         Positioned(
-          top: screenheight * 0.27 - 30,
-          left: (screenwidth - (screenwidth * 0.9)) / 2,
+          top: 0.27.sh - 30.h,
+          left: (1.sw - (0.9.sw)) / 2,
           child: SizedBox(
-            width: screenwidth * 0.9,
+            width: 0.9.sw,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  width: screenwidth * 0.7,
-                  height: 60,
-                  padding: const EdgeInsets.only(left: 10),
+                  alignment: Alignment.center
+                  ,
+                  width: 0.7.sw,
+                  height: 60.h,
+                  padding: EdgeInsets.only(left: 10.w),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.r),
                     color: Colors.white,
                   ),
                   child: TextField(
@@ -322,12 +322,12 @@ class _HomeState extends State<Home> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
-                      height: 60,
-                      width: 60,
+                      height: 60.h,
+                      width: 60.w,
                       color: Colors.white,
-                      child: const Icon(
+                      child: Icon(
                         Icons.search_outlined,
-                        size: 30,
+                        size: 30.sp,
                       ),
                     ),
                   ),

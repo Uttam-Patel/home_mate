@@ -32,13 +32,9 @@ class _ChangeContactState extends State<ChangeContact> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: clBG,
       appBar: AppBar(
-        backgroundColor: clPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Change Contact",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: Container(
@@ -221,18 +217,18 @@ class _ChangeContactState extends State<ChangeContact> {
 
         Navigator.pop(context);
         Navigator.pop(context);
-        snackMessage(context, "Contact Details Changed");
+        snackMessage(msg: "Contact Details Changed");
 
 
       } on FirebaseException catch (e) {
         if (e.code == "invalid-verification-code") {
           Navigator.pop(context);
           print(e.code);
-          snackMessage(context, "Incorrect OTP");
+          snackMessage(msg: "Incorrect OTP");
         } else {
           Navigator.pop(context);
           print(e.code);
-          snackMessage(context, e.code);
+          snackMessage(msg:e.code);
         }
       }
     }

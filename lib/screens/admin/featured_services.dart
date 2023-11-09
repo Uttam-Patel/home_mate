@@ -74,7 +74,7 @@ class _FeaturedServices extends State<FeaturedServices> {
                                             });
                                             Navigator.pop(context);
                                           } on FirebaseException catch (e) {
-                                            snackMessage(context, e.message!);
+                                            snackMessage(msg:e.message!);
                                             Navigator.pop(context);
                                           }
                                         },
@@ -123,7 +123,7 @@ class _FeaturedServices extends State<FeaturedServices> {
                                             });
                                             Navigator.pop(context);
                                           } on FirebaseException catch (e) {
-                                            snackMessage(context, e.message!);
+                                            snackMessage(msg:e.message!);
                                             Navigator.pop(context);
                                           }
                                         },

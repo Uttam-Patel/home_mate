@@ -7,12 +7,8 @@ class TermCondition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: clBG,
       appBar: AppBar(
-        backgroundColor: clPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text("Term & Conditions",
-          style: TextStyle(color: Colors.white),),
+        title: const Text("Term & Conditions",),
       ),
       body: const Padding(
         padding: EdgeInsets.all(16.0),

@@ -24,12 +24,8 @@ class _BookmarksState extends State<Bookmarks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: clBG,
       appBar: AppBar(
-        backgroundColor: clPrimary,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text("Favourite Services",style: TextStyle(color: Colors.white),),
-      ),
+        title: const Text("Favourite Services",),),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance.collection("users").doc(user!.uid).collection("bookmarks").snapshots(),
           builder: (context,snapshot) {

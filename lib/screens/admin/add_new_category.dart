@@ -28,13 +28,9 @@ class _AddCategory extends State<AddCategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: clBG,
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: clPrimary,
         title: const Text(
           "New Category",
-          style: TextStyle(color: Colors.white),
         ),
       ),
       body: ListView(children: [
@@ -201,7 +197,7 @@ class _AddCategory extends State<AddCategory> {
                     await createCategory(context);
                     Navigator.pop(context);
                   } else {
-                    snackMessage(context, "Please recheck entered details");
+                    snackMessage(msg:"Please recheck entered details");
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -242,7 +238,7 @@ class _AddCategory extends State<AddCategory> {
       Navigator.pop(context);
     } on FirebaseException catch (e) {
       Navigator.pop(context);
-      snackMessage(context, e.code);
+      snackMessage(msg: e.code);
     }
   }
 
