@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:home_mate/config.dart';
 import 'package:home_mate/constant/colors.dart';
+import 'package:home_mate/screens/login.dart';
 
 class VerifyEmail extends StatefulWidget {
   const VerifyEmail({Key? key}) : super(key: key);
@@ -60,16 +61,21 @@ class _VerifyEmailState extends State<VerifyEmail> {
             ),
             ListTile(
               leading: const Icon(Icons.email),
-              title: Text(user!.email!,overflow: TextOverflow.ellipsis,),
-              trailing: (user!.emailVerified)?const Icon(Icons.verified):InkWell(
-                onTap: () {
-                  verifyUserEmail(context);
-                },
-                child: Text(
-                  " Send Link ",
-                  style: TextStyle(color: clPrimary, height: 3),
-                ),
+              title: Text(
+                user!.email!,
+                overflow: TextOverflow.ellipsis,
               ),
+              trailing: (user!.emailVerified)
+                  ? const Icon(Icons.verified)
+                  : InkWell(
+                      onTap: () {
+                        verifyUserEmail(context);
+                      },
+                      child: Text(
+                        " Send Link ",
+                        style: TextStyle(color: clPrimary, height: 3),
+                      ),
+                    ),
             )
           ],
         ),
@@ -79,15 +85,18 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
   void verifyUserEmail(context) async {
     processDialog(context);
-    if(user!.emailVerified){
-      snackMessage(msg:"Your email is already verified!");
+    if (user!.emailVerified) {
+      snackMessage(msg: "Your email is already verified!");
       Navigator.pop(context);
       Navigator.pop(context);
-    }else{
+    } else {
       await user!.sendEmailVerification();
-      snackMessage(msg:"Email Verification mail is sent to ${user!.email}");
+      snackMessage(msg: "Email Verification mail is sent to ${user!.email}");
       Navigator.pop(context);
-      Navigator.pop(context);
+      snackMessage(
+          msg: "Please login again after varification for security purpose");
+      Navigator.pushNamedAndRemoveUntil(
+          context, LogIn.routeName, (route) => false);
     }
   }
 }
